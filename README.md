@@ -6,7 +6,8 @@ Run `yarn install` in the root directory to install the dependencies for **both*
 
 # Run project
 ## Client
-To run the **next** client, change directories with `cd client`, then run the command `yarn start`.
+To run the **next** client in development mode, run the following command in the root directory:
+`yarn client:dev`.
 
 ### Browser
 To access the client, go to the URL:  
@@ -15,7 +16,8 @@ To access the client, go to the URL:
 
 ## Server
 First create a **database** on your local machine with the name "pgmPlatform".  
-In a second terminal screen, chnage directories with `cd server`, then run the command `yarn develop` to run it in development mode.
+In a second terminal screen, to run the server in development mode run the following command from the root:
+`yarn server:dev`
 
 ### Browser
 To access strapi, go to the URL:
