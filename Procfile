@@ -1,1 +1,2 @@
-web: yarn client:dev
+web: yarn workspace client dev
+api: yarn workspace server develop
