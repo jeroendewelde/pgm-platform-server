@@ -3,7 +3,7 @@
     "workspaces": ["./packages/client", "./packages/server"],
     "scripts": {
         "client:dev": "yarn workspace client dev",
-        "client:start": "yarn workspace client start",
+        "client:start": "yarn workspace client build && yarn workspace client start",
         "server:dev": "yarn workspace server develop",
         "server:start": "yarn workspace server start"
     }
