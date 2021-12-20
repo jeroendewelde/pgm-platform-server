@@ -1,1 +1,1 @@
-web: yarn client:start
+web: cd client && yarn start
