@@ -160,3 +160,11 @@ coverage
 # .pnp.*
 
 # End of https://www.toptal.com/developers/gitignore/api/yarn,nextjs,strapi,macos,visualstudiocode
+
+# Yarn
+.yarn/*
+!.yarn/cache
+!.yarn/releases
+!.yarn/plugins
+!.yarn/sdks
+!.yarn/versions
