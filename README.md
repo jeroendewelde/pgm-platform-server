@@ -31,4 +31,3 @@ In development it is possible to create new entities, in production it is not po
 
 # Documentation YARN workspaces
 [https://classic.yarnpkg.com/lang/en/docs/workspaces/](https://classic.yarnpkg.com/lang/en/docs/workspaces/)
-
