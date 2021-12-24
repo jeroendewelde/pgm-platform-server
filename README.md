@@ -58,6 +58,10 @@ DATABASE_NAME = d8gjmie39pp46s
 DATABASE_USERNAME = pkbprrrvwrgjkt
 DATABASE_PASSWORD = 0e0c0396b5c8a7f5e41441d98f272b171144d48260651a6f2b702bdc05d9b0df
 DATABASE_SSL = true
+
+CLOUDINARY_NAME = dgfgw9ngd
+CLOUDINARY_KEY = 298424895728527
+CLOUDINARY_SECRET = JTKAQNRibTZzynWGf4Mmok_hreE
 ```
 
 Because you aren't able to **edit** content-types in production, you can run the app in development BUT use the external heroku database. This can also be done with the following command:

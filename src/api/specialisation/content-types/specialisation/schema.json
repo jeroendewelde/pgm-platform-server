@@ -1,0 +1,29 @@
+{
+  "kind": "collectionType",
+  "collectionName": "specialisations",
+  "info": {
+    "singularName": "specialisation",
+    "pluralName": "specialisations",
+    "displayName": "Specialisation",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::course.course",
+      "mappedBy": "specialisations"
+    },
+    "Academic_year": {
+      "type": "string",
+      "regex": "^\\d{4}-\\d{4}$"
+    }
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "collectionName": "components_socials_socials",
+  "info": {
+    "displayName": "socials",
+    "icon": "link"
+  },
+  "options": {},
+  "attributes": {
+    "url": {
+      "type": "string"
+    },
+    "platform": {
+      "type": "enumeration",
+      "enum": [
+        "github",
+        "linkedin",
+        "facebook",
+        "twitter",
+        "stackOverflow"
+      ]
+    }
+  }
+}

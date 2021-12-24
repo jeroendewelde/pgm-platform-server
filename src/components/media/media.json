@@ -1,0 +1,29 @@
+{
+  "collectionName": "components_media_media",
+  "info": {
+    "displayName": "Media",
+    "icon": "paperclip"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "screenshot",
+        "codeSnippet",
+        "ideaboard",
+        "moodboard",
+        "videoYT"
+      ]
+    },
+    "media": {
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ],
+      "type": "media",
+      "multiple": false
+    }
+  }
+}

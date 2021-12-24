@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_field_experience_interns",
+  "info": {
+    "displayName": "Intern",
+    "icon": "briefcase",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "student": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::student.student"
+    },
+    "function": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

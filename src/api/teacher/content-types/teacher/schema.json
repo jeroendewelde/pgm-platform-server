@@ -4,15 +4,51 @@
   "info": {
     "singularName": "teacher",
     "pluralName": "teachers",
-    "displayName": "Teacher"
+    "displayName": "Teacher",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
   },
   "pluginOptions": {},
   "attributes": {
-    "name": {
+    "firstname": {
       "type": "string"
+    },
+    "lastname": {
+      "type": "string"
+    },
+    "bio": {
+      "type": "richtext"
+    },
+    "quote": {
+      "type": "text"
+    },
+    "field_experience": {
+      "type": "component",
+      "repeatable": true,
+      "component": "field-experience.field-experience"
+    },
+    "socials": {
+      "type": "component",
+      "repeatable": true,
+      "component": "socials.socials"
+    },
+    "picture": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images",
+        "files",
+        "videos"
+      ]
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::course.course",
+      "mappedBy": "teachers"
     }
   }
 }

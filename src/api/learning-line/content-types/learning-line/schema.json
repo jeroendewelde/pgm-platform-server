@@ -1,0 +1,25 @@
+{
+  "kind": "collectionType",
+  "collectionName": "learning_lines",
+  "info": {
+    "singularName": "learning-line",
+    "pluralName": "learning-lines",
+    "displayName": "Learning_Line",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string"
+    },
+    "courses": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::course.course",
+      "mappedBy": "learning_line"
+    }
+  }
+}
