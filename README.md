@@ -74,3 +74,4 @@ npm run develop
 
 This wil automatically open the **register-screen** in your browser on [localhost:1337](http://localhost:1337).  
 The same credentials can be used here as on the deployed app on heroku.
+
