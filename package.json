@@ -11,6 +11,8 @@
   },
   "devDependencies": {},
   "dependencies": {
+    "@ckeditor/ckeditor5-build-classic": "^31.1.0",
+    "@ckeditor/ckeditor5-react": "^3.0.3",
     "@strapi/plugin-graphql": "4.0.2",
     "@strapi/plugin-i18n": "4.0.2",
     "@strapi/plugin-users-permissions": "4.0.2",

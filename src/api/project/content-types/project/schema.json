@@ -37,10 +37,12 @@
       "target": "api::student.student",
       "inversedBy": "projects"
     },
-    "media": {
-      "type": "component",
-      "repeatable": true,
-      "component": "media.media"
+    "Media": {
+      "type": "dynamiczone",
+      "components": [
+        "media.media-url",
+        "media.media"
+      ]
     }
   }
 }

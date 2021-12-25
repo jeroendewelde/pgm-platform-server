@@ -1,8 +1,9 @@
 {
   "collectionName": "components_media_media",
   "info": {
-    "displayName": "Media",
-    "icon": "paperclip"
+    "displayName": "Media upload",
+    "icon": "paperclip",
+    "description": ""
   },
   "options": {},
   "attributes": {
@@ -17,13 +18,14 @@
       ]
     },
     "media": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
       "allowedTypes": [
         "images",
         "files",
         "videos"
-      ],
-      "type": "media",
-      "multiple": false
+      ]
     }
   }
 }

@@ -1,0 +1,17 @@
+{
+  "collectionName": "components_media_media_urls",
+  "info": {
+    "displayName": "Media url",
+    "icon": "ad",
+    "description": ""
+  },
+  "options": {},
+  "attributes": {
+    "platform": {
+      "type": "string"
+    },
+    "url": {
+      "type": "text"
+    }
+  }
+}

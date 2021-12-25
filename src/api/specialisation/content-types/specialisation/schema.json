@@ -4,7 +4,7 @@
   "info": {
     "singularName": "specialisation",
     "pluralName": "specialisations",
-    "displayName": "Specialisation",
+    "displayName": "Afstudeerrichting",
     "description": ""
   },
   "options": {
@@ -13,7 +13,7 @@
   "pluginOptions": {},
   "attributes": {
     "name": {
-      "type": "string"
+      "type": "text"
     },
     "courses": {
       "type": "relation",
