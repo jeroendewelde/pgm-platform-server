@@ -1,0 +1,207 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type SocialMedia {
+  """The ID of this social media information"""
+  id: Int!
+
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+  personId: Int
+
+  """The person this social media belongs to"""
+  person: PersonInformation!
+}
+
+type FieldExperience {
+  """The ID of the person information"""
+  id: Int!
+
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int
+
+  """The person this field experience belongs to"""
+  person: PersonInformation!
+}
+
+type PersonInformation {
+  """The ID of the person information"""
+  id: Int!
+
+  """The quote for this person"""
+  quote: String!
+
+  """The bio for this person"""
+  bio: String!
+  dob: DateTime!
+  personId: Int!
+
+  """The person this person information belongs to"""
+  person: Person
+
+  """List of social media for this person"""
+  socialMedias: [SocialMedia!]
+
+  """List of field experiences for this person"""
+  fieldExperiences: [FieldExperience!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Person {
+  """The ID of the person"""
+  id: Int!
+
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+  personInformation: PersonInformation
+}
+
+"""The type of the person"""
+enum PersonType {
+  STUDENT
+  TEACHER
+}
+
+type Query {
+  persons: [Person!]!
+  person(id: Int!): Person!
+  personInformations: [PersonInformation!]!
+  personInformation(id: Int!): PersonInformation!
+  fieldExperiences: [FieldExperience!]!
+  fieldExperience(id: Int!): FieldExperience!
+  socialMedias: [SocialMedia!]!
+  socialMedia(id: Int!): SocialMedia!
+}
+
+type Mutation {
+  createPerson(createPersonInput: CreatePersonInput!): Person!
+  updatePerson(updatePersonInput: UpdatePersonInput!, id: Int!): Person!
+  removePerson(id: Int!): Person!
+  createPersonInformation(createPersonInformationInput: CreatePersonInformationInput!): PersonInformation!
+  updatePersonInformation(updatePersonInformationInput: UpdatePersonInformationInput!, id: Int!): PersonInformation!
+  removePersonInformation(id: Int!): PersonInformation!
+  createFieldExperience(createFieldExperienceInput: CreateFieldExperienceInput!): FieldExperience!
+  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: Int!): FieldExperience!
+  removeFieldExperience(id: Int!): FieldExperience!
+  createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
+  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
+  removeSocialMedia(id: Int!): SocialMedia!
+}
+
+input CreatePersonInput {
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+}
+
+input UpdatePersonInput {
+  """The first name of the person"""
+  firstName: String
+
+  """The last name of the person"""
+  lastName: String
+
+  """The type of the person"""
+  type: PersonType
+}
+
+input CreatePersonInformationInput {
+  """The quote for this person"""
+  quote: String!
+
+  """The bio for this person"""
+  bio: String!
+
+  """Date of birth for this person"""
+  dob: String!
+  personId: Int
+}
+
+input UpdatePersonInformationInput {
+  """The quote for this person"""
+  quote: String!
+
+  """The bio for this person"""
+  bio: String!
+
+  """Date of birth for this person"""
+  dob: String!
+  personId: Int
+}
+
+input CreateFieldExperienceInput {
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int!
+}
+
+input UpdateFieldExperienceInput {
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int!
+}
+
+input CreateSocialMediaInput {
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+  personId: Int!
+}
+
+input UpdateSocialMediaInput {
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+  personId: Int!
+}
