@@ -24,6 +24,8 @@ import { FieldExperiencesModule } from './field-experiences/field-experiences.mo
 import { FieldExperience } from './field-experiences/entities/field-experience.entity';
 import { ProjectsModule } from './projects/projects.module';
 import { Project } from './projects/entities/project.entity';
+import { CoursesModule } from './courses/courses.module';
+import { Course } from './courses/entities/course.entity';
 
 @Module({
   imports: [
@@ -42,6 +44,7 @@ import { Project } from './projects/entities/project.entity';
     }),
     TypeOrmModule.forFeature(
       [
+        Course,
         FieldExperience,
         Person,
         Project,
@@ -49,7 +52,7 @@ import { Project } from './projects/entities/project.entity';
         SocialMedia
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule],
   controllers: [AppController],
   providers: [AppService],
 })

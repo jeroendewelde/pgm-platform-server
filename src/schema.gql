@@ -100,6 +100,20 @@ type Project {
   body: String!
 }
 
+type Course {
+  """The ID of the course"""
+  id: Int!
+
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+}
+
 type Query {
   persons: [Person!]!
   person(id: Int!): Person!
@@ -111,6 +125,8 @@ type Query {
   socialMedia(id: Int!): SocialMedia!
   projects: [Project!]!
   project(id: Int!): Project!
+  courses: [Course!]!
+  course(id: Int!): Course!
 }
 
 type Mutation {
@@ -129,6 +145,9 @@ type Mutation {
   createProject(createProjectInput: CreateProjectInput!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
   removeProject(id: Int!): Project!
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
+  removeCourse(id: Int!): Course!
 }
 
 input CreatePersonInput {
@@ -245,4 +264,26 @@ input UpdateProjectInput {
 
   """The full description of the project"""
   body: String!
+}
+
+input CreateCourseInput {
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+}
+
+input UpdateCourseInput {
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
 }
