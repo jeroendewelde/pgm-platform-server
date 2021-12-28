@@ -8,7 +8,6 @@ import { ProjectsModule } from 'src/projects/projects.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course]),
-    // ProjectsModule,
     forwardRef(() => ProjectsModule)
   ],
   providers: [CoursesResolver, CoursesService],
