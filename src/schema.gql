@@ -45,10 +45,10 @@ type PersonInformation {
   id: Int!
 
   """The quote for this person"""
-  quote: String!
+  quote: String
 
   """The bio for this person"""
-  bio: String!
+  bio: String
   dob: DateTime!
   personId: Int!
 
@@ -66,27 +66,6 @@ type PersonInformation {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type Person {
-  """The ID of the person"""
-  id: Int!
-
-  """The first name of the person"""
-  firstName: String!
-
-  """The last name of the person"""
-  lastName: String!
-
-  """The type of the person"""
-  type: PersonType!
-  personInformation: PersonInformation
-}
-
-"""The type of the person"""
-enum PersonType {
-  STUDENT
-  TEACHER
-}
 
 type Course {
   """The ID of the course"""
@@ -129,6 +108,28 @@ type Project {
 
   """The course this project belongs to"""
   course: Course!
+  students: [Person!]!
+}
+
+type Person {
+  """The ID of the person"""
+  id: Int!
+
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+  personInformation: PersonInformation
+}
+
+"""The type of the person"""
+enum PersonType {
+  STUDENT
+  TEACHER
 }
 
 type Query {
@@ -160,6 +161,7 @@ type Mutation {
   updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
   removeSocialMedia(id: Int!): SocialMedia!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  addStudentsToProject(studentIds: [Int!]!, projectId: Int!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
   removeProject(id: Int!): Project!
   createCourse(createCourseInput: CreateCourseInput!): Course!
@@ -191,25 +193,25 @@ input UpdatePersonInput {
 
 input CreatePersonInformationInput {
   """The quote for this person"""
-  quote: String!
+  quote: String
 
   """The bio for this person"""
-  bio: String!
+  bio: String
 
   """Date of birth for this person"""
-  dob: String!
+  dob: String
   personId: Int
 }
 
 input UpdatePersonInformationInput {
   """The quote for this person"""
-  quote: String!
+  quote: String
 
   """The bio for this person"""
-  bio: String!
+  bio: String
 
   """Date of birth for this person"""
-  dob: String!
+  dob: String
   personId: Int
 }
 

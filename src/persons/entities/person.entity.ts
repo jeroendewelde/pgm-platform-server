@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
-import { Column, Entity, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Project } from 'src/projects/entities/project.entity';
+import { Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { PersonType } from '../../scalars/person-type.scalar';
 
@@ -27,4 +28,7 @@ export class Person {
   @OneToOne(type => PersonInformation, personInformation => personInformation.person)
   @Field(type => PersonInformation, { nullable: true })
   personInformation?: PersonInformation
+
+  @ManyToMany(() => Project, project => project.students)
+  projects: Project[]
 }

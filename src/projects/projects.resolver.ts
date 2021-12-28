@@ -5,6 +5,7 @@ import { CreateProjectInput } from './dto/create-project.input';
 import { UpdateProjectInput } from './dto/update-project.input';
 import { ProjectsService } from './projects.service';
 import { Course } from 'src/courses/entities/course.entity';
+import { Person } from 'src/persons/entities/person.entity';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
@@ -13,6 +14,16 @@ export class ProjectsResolver {
   @Mutation(() => Project)
   createProject(@Args('createProjectInput') createProjectInput: CreateProjectInput): Promise<Project> {
     return this.projectsService.create(createProjectInput);
+  }
+
+  @Mutation(() => Project)
+  addStudentsToProject(
+    @Args('projectId', { type: () => Int }) 
+    projectId: number,
+    @Args('studentIds', { type: () => [Int] }) 
+    studentIds: number[]
+  ): Promise<Project> {
+    return this.projectsService.addStudentsToProject(projectId, studentIds);
   }
 
   @Query(() => [Project], { name: 'projects' })
@@ -30,6 +41,14 @@ export class ProjectsResolver {
     @Parent() project: Project,
   ): Promise<Course> {
     return this.projectsService.getCourse(project.courseId);
+  }
+
+  @ResolveField(() => [Person])
+  students(
+    @Parent() project: Project,
+  // ) {
+  ): Promise<Person[]> {
+    return this.projectsService.getStudents(project.id);
   }
 
   @Mutation(() => Project)

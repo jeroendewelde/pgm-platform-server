@@ -13,16 +13,16 @@ export class PersonInformation {
   id: number
 
   @Column()
-  @Field(() => String, { description: 'The quote for this person' })
-  quote: string
+  @Field(() => String, { description: 'The quote for this person', nullable: true })
+  quote?: string
 
   @Column()
-  @Field(() => String, { description: 'The bio for this person' })
-  bio: string
+  @Field(() => String, { description: 'The bio for this person', nullable: true })
+  bio?: string
 
   @Column({ type: 'timestamp'})
   @Field()
-  dob: Date;
+  dob?: Date;
 
   @Column()
   @Field(type => Int)

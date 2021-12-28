@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
 import { Course } from 'src/courses/entities/course.entity';
-import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
+import { Person } from 'src/persons/entities/person.entity';
+import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -33,4 +34,9 @@ export class Project {
   @ManyToOne(() => Course, course => course.projects, { onDelete: 'CASCADE' })
   @Field(() => Course, { description: 'The course this project belongs to' })
   course: Course
+
+  @ManyToMany(() => Person, person => person.projects)
+  // @JoinTable({name: 'project_has_students', joinColumn: {name: 'project_id', referencedColumnName: 'id'}, inverseJoinColumn: {name: 'student_id', referencedColumnName: 'id'}})
+  @JoinTable({name: 'project_has_students'})
+  students: Person[]
 }
