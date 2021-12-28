@@ -18,7 +18,7 @@ type SocialMedia {
 }
 
 type FieldExperience {
-  """The ID of the person information"""
+  """The ID of the field experience"""
   id: Int!
 
   """The duration of the field experience"""
@@ -86,6 +86,20 @@ enum PersonType {
   TEACHER
 }
 
+type Project {
+  """The ID of the project"""
+  id: Int!
+
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+}
+
 type Query {
   persons: [Person!]!
   person(id: Int!): Person!
@@ -95,6 +109,8 @@ type Query {
   fieldExperience(id: Int!): FieldExperience!
   socialMedias: [SocialMedia!]!
   socialMedia(id: Int!): SocialMedia!
+  projects: [Project!]!
+  project(id: Int!): Project!
 }
 
 type Mutation {
@@ -110,6 +126,9 @@ type Mutation {
   createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
   updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
   removeSocialMedia(id: Int!): SocialMedia!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
+  removeProject(id: Int!): Project!
 }
 
 input CreatePersonInput {
@@ -204,4 +223,26 @@ input UpdateSocialMediaInput {
   """The URL of the social media"""
   url: String!
   personId: Int!
+}
+
+input CreateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+}
+
+input UpdateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
 }

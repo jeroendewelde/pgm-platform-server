@@ -22,6 +22,8 @@ import { SocialMediasModule } from './social-medias/social-medias.module';
 import { SocialMedia } from './social-medias/entities/social-media.entity';
 import { FieldExperiencesModule } from './field-experiences/field-experiences.module';
 import { FieldExperience } from './field-experiences/entities/field-experience.entity';
+import { ProjectsModule } from './projects/projects.module';
+import { Project } from './projects/entities/project.entity';
 
 @Module({
   imports: [
@@ -42,11 +44,12 @@ import { FieldExperience } from './field-experiences/entities/field-experience.e
       [
         FieldExperience,
         Person,
+        Project,
         PersonInformation,
         SocialMedia
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule],
   controllers: [AppController],
   providers: [AppService],
 })

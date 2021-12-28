@@ -4,9 +4,10 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 
 import { Person } from './entities/person.entity';
+import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
+
 import { CreatePersonInput } from './dto/create-person.input';
 import { UpdatePersonInput } from './dto/update-person.input';
-import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
 import { PersonInformationsService } from 'src/person-informations/person-informations.service';
 
 @Injectable()
