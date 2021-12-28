@@ -35,8 +35,8 @@ export class Project {
   @Field(() => Course, { description: 'The course this project belongs to' })
   course: Course
 
-  @ManyToMany(() => Person, person => person.projects)
+  @ManyToMany(() => Person, person => person.projects, { nullable: true })
   // @JoinTable({name: 'project_has_students', joinColumn: {name: 'project_id', referencedColumnName: 'id'}, inverseJoinColumn: {name: 'student_id', referencedColumnName: 'id'}})
   @JoinTable({name: 'project_has_students'})
-  students: Person[]
+  students?: Person[]
 }

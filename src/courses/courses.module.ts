@@ -4,11 +4,13 @@ import { CoursesResolver } from './courses.resolver';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Course } from './entities/course.entity';
 import { ProjectsModule } from 'src/projects/projects.module';
+import { PersonsModule } from 'src/persons/persons.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course]),
-    forwardRef(() => ProjectsModule)
+    forwardRef(() => ProjectsModule),
+    PersonsModule
   ],
   providers: [CoursesResolver, CoursesService],
   exports: [

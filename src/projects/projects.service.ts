@@ -29,24 +29,15 @@ export class ProjectsService {
   }
 
   async addStudentsToProject(projectId: number, studentIds: number[]): Promise<Project> {
-    const project = await this.findOneById(projectId);
-    console.log('project', project);
-    //project.students = studentIds;
-    console.log('studentIds', studentIds);
-
-    let students = [];
+    const project = await this.projectRepository.findOneOrFail(projectId, { relations: ['students'] });
 
     studentIds.forEach(async(studentId) => {
-      console.log('student ID', studentId);
       const student = await this.personsService.findOneById(studentId);
-      console.log('student', student);
+    
       if(student.type === 'STUDENT') {
-        //project.students.push(student);
-        students.push(student);
-      }
-    });
-    project.students = students;
-    console.log('project....', project);
+          if( !project.students.includes(student) ) project.students.push(student);
+        }
+    });    
     return this.projectRepository.save(project);
   }
 
