@@ -1,5 +1,6 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
-import { Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
+import { Course } from 'src/courses/entities/course.entity';
+import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -20,5 +21,16 @@ export class Project {
   @Field(() => String, { description: 'The full description of the project' })
   body: string
 
-  //TODO: academic year
+  @Column()
+  @Field(() => String, { description: 'The academic year of the project' })
+  academicYear: string
+
+  @Column()
+  @Field(() => Int, { description: 'The ID of the course this project was made for' })
+  courseId: number
+
+  // Relations
+  @ManyToOne(() => Course, course => course.projects, { onDelete: 'CASCADE' })
+  @Field(() => Course, { description: 'The course this project belongs to' })
+  course: Course
 }

@@ -21,7 +21,7 @@ export class SocialMedia {
   url: string
 
   @Column()
-  @Field(type => Int, { nullable: true })
+  @Field(type => Int, { description: 'The ID of the person this social media belongs to' })
   personId: number;
 
   // Relations

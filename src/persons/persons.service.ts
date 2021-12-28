@@ -35,7 +35,6 @@ export class PersonsService {
     return this.personInformationService.findByPersonId(personId);
   }
 
-
   update(id: number, updatePersonInput: UpdatePersonInput): Promise<Person> {
     return this.personRepository.save({
       id: id,

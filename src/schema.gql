@@ -11,7 +11,9 @@ type SocialMedia {
 
   """The URL of the social media"""
   url: String!
-  personId: Int
+
+  """The ID of the person this social media belongs to"""
+  personId: Int!
 
   """The person this social media belongs to"""
   person: PersonInformation!
@@ -86,20 +88,6 @@ enum PersonType {
   TEACHER
 }
 
-type Project {
-  """The ID of the project"""
-  id: Int!
-
-  """The name of the project"""
-  name: String!
-
-  """The teaser text for the project"""
-  teaserText: String!
-
-  """The full description of the project"""
-  body: String!
-}
-
 type Course {
   """The ID of the course"""
   id: Int!
@@ -112,6 +100,35 @@ type Course {
 
   """The number of the term"""
   term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The List of projects made for this course"""
+  projects: [Project!]
+}
+
+type Project {
+  """The ID of the project"""
+  id: Int!
+
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """The course this project belongs to"""
+  course: Course!
 }
 
 type Query {
@@ -253,6 +270,12 @@ input CreateProjectInput {
 
   """The full description of the project"""
   body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
 }
 
 input UpdateProjectInput {
@@ -264,6 +287,12 @@ input UpdateProjectInput {
 
   """The full description of the project"""
   body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
 }
 
 input CreateCourseInput {
@@ -275,6 +304,9 @@ input CreateCourseInput {
 
   """The number of the term"""
   term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
 }
 
 input UpdateCourseInput {
@@ -286,4 +318,7 @@ input UpdateCourseInput {
 
   """The number of the term"""
   term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
 }

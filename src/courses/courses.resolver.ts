@@ -1,9 +1,10 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, ResolveField, Parent } from '@nestjs/graphql';
 
 import { Course } from './entities/course.entity';
 import { CreateCourseInput } from './dto/create-course.input';
 import { UpdateCourseInput } from './dto/update-course.input';
 import { CoursesService } from './courses.service';
+import { Project } from 'src/projects/entities/project.entity';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -22,6 +23,11 @@ export class CoursesResolver {
   @Query(() => Course, { name: 'course' })
   findOne(@Args('id', { type: () => Int }) id: number): Promise<Course> {
     return this.coursesService.findOneById(id);
+  }
+
+  @ResolveField(returns => [Project])
+  projects(@Parent() course: Course): Promise<Project[]> {
+    return this.coursesService.getProjects(course.id);
   }
 
   @Mutation(() => Course)

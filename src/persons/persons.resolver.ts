@@ -1,10 +1,11 @@
 import { Resolver, Query, Mutation, Args, Int, Parent, ResolveField } from '@nestjs/graphql';
 
 import { Person } from './entities/person.entity';
+import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
+
 import { CreatePersonInput } from './dto/create-person.input';
 import { UpdatePersonInput } from './dto/update-person.input';
 import { PersonsService } from './persons.service';
-import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
 
 @Resolver(() => Person)
 export class PersonsResolver {

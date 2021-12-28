@@ -1,5 +1,5 @@
 import { InputType, Int, Field } from '@nestjs/graphql';
-import { IsNotEmpty, IsString } from 'class-validator';
+import { IsNotEmpty, IsString, Matches, MaxLength, MinLength } from 'class-validator';
 
 @InputType()
 export class CreateProjectInput {
@@ -17,4 +17,15 @@ export class CreateProjectInput {
   @IsString()
   @Field(() => String, { description: 'The full description of the project' })
   body: string
+
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(9)
+  @MaxLength(9)
+  @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2020-2021'"})
+  @Field(() => String, { description: 'The academic year of the project' })
+  academicYear: string
+
+  @Field(() => Int, { description: 'The ID of the course this project was made for' })
+  courseId: number
 }
