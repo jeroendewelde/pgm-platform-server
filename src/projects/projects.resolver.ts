@@ -46,7 +46,6 @@ export class ProjectsResolver {
   @ResolveField(() => [Person])
   students(
     @Parent() project: Project,
-  // ) {
   ): Promise<Person[]> {
     return this.projectsService.getStudents(project.id);
   }

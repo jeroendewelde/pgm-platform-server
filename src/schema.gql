@@ -2,6 +2,51 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type Project {
+  """The ID of the project"""
+  id: Int!
+
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """The course this project belongs to"""
+  course: Course!
+  students: [Person!]!
+}
+
+type Course {
+  """The ID of the course"""
+  id: Int!
+
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The List of projects made for this course"""
+  projects: [Project!]
+  teachers: [Person!]!
+}
+
 type SocialMedia {
   """The ID of this social media information"""
   id: Int!
@@ -67,50 +112,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Course {
-  """The ID of the course"""
-  id: Int!
-
-  """The name of the course"""
-  name: String!
-
-  """The description of the course"""
-  description: String!
-
-  """The number of the term"""
-  term: Int!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """The List of projects made for this course"""
-  projects: [Project!]
-}
-
-type Project {
-  """The ID of the project"""
-  id: Int!
-
-  """The name of the project"""
-  name: String!
-
-  """The teaser text for the project"""
-  teaserText: String!
-
-  """The full description of the project"""
-  body: String!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """The ID of the course this project was made for"""
-  courseId: Int!
-
-  """The course this project belongs to"""
-  course: Course!
-  students: [Person!]!
-}
-
 type Person {
   """The ID of the person"""
   id: Int!
@@ -165,6 +166,7 @@ type Mutation {
   updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
   removeProject(id: Int!): Project!
   createCourse(createCourseInput: CreateCourseInput!): Course!
+  addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
   removeCourse(id: Int!): Course!
 }

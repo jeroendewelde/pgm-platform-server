@@ -1,6 +1,7 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Person } from 'src/persons/entities/person.entity';
 import { Project } from 'src/projects/entities/project.entity';
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
+import { Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 @ObjectType()
@@ -29,4 +30,8 @@ export class Course {
   @OneToMany(type => Project, project => project.course, { cascade: true })
   @Field(type => [Project], { description: 'The List of projects made for this course', nullable: true })
   projects?: Project[]
+
+  @ManyToMany(() => Person, person => person.courses, { nullable: true })
+  @JoinTable({name: 'courses_have_teachers'})
+  teachers: Person[]
 }
