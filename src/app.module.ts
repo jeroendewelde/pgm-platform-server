@@ -28,6 +28,8 @@ import { CoursesModule } from './courses/courses.module';
 import { Course } from './courses/entities/course.entity';
 import { LearningLinesModule } from './learning-lines/learning-lines.module';
 import { LearningLine } from './learning-lines/entities/learning-line.entity';
+import { AttachmentsModule } from './attachments/attachments.module';
+import { Attachment } from './attachments/entities/attachment.entity';
 
 @Module({
   imports: [
@@ -46,6 +48,7 @@ import { LearningLine } from './learning-lines/entities/learning-line.entity';
     }),
     TypeOrmModule.forFeature(
       [
+        Attachment,
         Course,
         FieldExperience,
         LearningLine,
@@ -55,7 +58,7 @@ import { LearningLine } from './learning-lines/entities/learning-line.entity';
         SocialMedia
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, ],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -6,12 +6,14 @@ import { Project } from './entities/project.entity';
 import { CoursesModule } from 'src/courses/courses.module';
 import { PersonsService } from 'src/persons/persons.service';
 import { PersonsModule } from 'src/persons/persons.module';
+import { AttachmentsModule } from 'src/attachments/attachments.module';
 
 @Module({
   imports: [
     TypeOrmModule.forFeature([Project]),
     forwardRef(() => CoursesModule),
-    PersonsModule
+    PersonsModule,
+    AttachmentsModule,
   ],
   providers: [ProjectsResolver, ProjectsService],
   exports: [

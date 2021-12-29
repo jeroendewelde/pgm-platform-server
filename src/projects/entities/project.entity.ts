@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
 import { Course } from 'src/courses/entities/course.entity';
 import { Person } from 'src/persons/entities/person.entity';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, PrimaryGeneratedColumn } from 'typeorm';
@@ -39,4 +40,8 @@ export class Project {
   // @JoinTable({name: 'project_has_students', joinColumn: {name: 'project_id', referencedColumnName: 'id'}, inverseJoinColumn: {name: 'student_id', referencedColumnName: 'id'}})
   @JoinTable({name: 'projects_have_students'})
   students?: Person[]
+
+  @ManyToMany(() => Attachment, attachment => attachment.projects, { nullable: true, cascade: true })
+  @JoinTable({name: 'projects_have_attachments'})
+  attachments?: Attachment[]
 }

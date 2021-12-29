@@ -12,6 +12,9 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { CoursesService } from 'src/courses/courses.service';
 import { Person } from 'src/persons/entities/person.entity';
 import { PersonsService } from 'src/persons/persons.service';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
+import { CreateAttachmentInput } from 'src/attachments/dto/create-attachment.input';
+import { AttachmentsService } from 'src/attachments/attachments.service';
 
 @Injectable()
 export class ProjectsService {
@@ -20,12 +23,24 @@ export class ProjectsService {
     private projectRepository: Repository<Project>,
     @Inject(forwardRef(() => CoursesService))
     private coursesService: CoursesService,
-    private personsService: PersonsService
+    private personsService: PersonsService,
+    private attachmentsService: AttachmentsService
   ) {}
 
   create(createProjectInput: CreateProjectInput): Promise<Project> {
     const newProject = this.projectRepository.create(createProjectInput);
     return this.projectRepository.save(newProject);
+  }
+
+  async addAttachmentsToProject(projectId: number, attachments: number[]): Promise<Project> {
+    const project = await this.projectRepository.findOneOrFail(projectId, { relations: ['attachments'] });
+
+    attachments.forEach(async(attachment) => {
+      const newAttachment = await this.attachmentsService.findOneById(attachment);
+
+      if( !project.attachments.includes(newAttachment) ) project.attachments.push(newAttachment);
+    })
+    return this.projectRepository.save(project);
   }
 
   async addStudentsToProject(projectId: number, studentIds: number[]): Promise<Project> {
@@ -55,6 +70,15 @@ export class ProjectsService {
         courseId
       }
     })
+  }
+
+  async getAttachments(projectId: number): Promise<Attachment[]> {
+    const project = await this.projectRepository.findOneOrFail(projectId, {
+      relations: ['attachments']
+    });
+      
+    if(project.attachments) return project.attachments;
+    return [];
   }
   
   getCourse(courseId: number): Promise<Course> {

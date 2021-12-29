@@ -10,6 +10,8 @@ import { Project } from 'src/projects/entities/project.entity';
 import { ProjectsService } from 'src/projects/projects.service';
 import { PersonsService } from 'src/persons/persons.service';
 import { Person } from 'src/persons/entities/person.entity';
+import { AttachmentsService } from 'src/attachments/attachments.service';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
 
 @Injectable()
 export class CoursesService {
@@ -18,12 +20,24 @@ export class CoursesService {
     private courseRepository: Repository<Course>,
     @Inject(forwardRef(() => ProjectsService))
     private readonly projectService: ProjectsService,
-    private personsService: PersonsService
+    private personsService: PersonsService,
+    private attachmentsService: AttachmentsService,
   ) {}
 
   create(createCourseInput: CreateCourseInput): Promise<Course> {
     const newCourse = this.courseRepository.create(createCourseInput);
     return this.courseRepository.save(newCourse);
+  }
+
+  async addAttachmentsToCourse(courseId: number, attachments: number[]): Promise<Course> {
+    const course = await this.courseRepository.findOneOrFail(courseId, { relations: ['attachments'] });
+
+    attachments.forEach(async(attachment) => {
+      const newAttachment = await this.attachmentsService.findOneById(attachment);
+
+      if( !course.attachments.includes(newAttachment) ) course.attachments.push(newAttachment);
+    })
+    return this.courseRepository.save(course);
   }
 
   async addTeachersToCourse(courseId: number, teacherIds: number[]): Promise<Course> {
@@ -54,6 +68,15 @@ export class CoursesService {
         learningLineId : learningLineId
       }
     })
+  }
+
+  async getAttachments(courseId: number): Promise<Attachment[]> {
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ['attachments']
+    });
+      
+    if(course.attachments) return course.attachments;
+    return [];
   }
 
   // findByLearningLineId(learningLineId: number): Promise<Course[]> {

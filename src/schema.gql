@@ -2,20 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type LearningLine {
-  """The ID of the learning line"""
-  id: Int!
-
-  """The name of the learning line"""
-  name: String!
-
-  """The color of the learning line"""
-  color: String!
-
-  """The List of courses made for this learning line"""
-  courses: [Course!]!
-}
-
 type Project {
   """The ID of the project"""
   id: Int!
@@ -37,7 +23,36 @@ type Project {
 
   """The course this project belongs to"""
   course: Course!
+  attachments: [Attachment!]!
   students: [Person!]!
+}
+
+type Attachment {
+  """The ID of the attachment"""
+  id: Int!
+
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
+type LearningLine {
+  """The ID of the learning line"""
+  id: Int!
+
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+
+  """The List of courses made for this learning line"""
+  courses: [Course!]!
 }
 
 type Course {
@@ -64,6 +79,7 @@ type Course {
 
   """The learning line this course belongs to"""
   learningLine: LearningLine!
+  attachments: [Attachment!]!
   teachers: [Person!]!
 }
 
@@ -167,6 +183,8 @@ type Query {
   courses: [Course!]!
   course(id: Int!): Course!
   coursesByLearningLineId(learningLineId: Int!): [Course!]!
+  attachments: [Attachment!]!
+  attachment(id: Int!): Attachment!
   learningLines: [LearningLine!]!
   learningLine(id: Int!): LearningLine!
 }
@@ -185,13 +203,18 @@ type Mutation {
   updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
   removeSocialMedia(id: Int!): SocialMedia!
   createProject(createProjectInput: CreateProjectInput!): Project!
+  addAttachmentsToProject(attachments: [Int!]!, projectId: Int!): Project!
   addStudentsToProject(studentIds: [Int!]!, projectId: Int!): Project!
   updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
   removeProject(id: Int!): Project!
   createCourse(createCourseInput: CreateCourseInput!): Course!
+  addAttachmentsToCourse(attachments: [Int!]!, courseId: Int!): Course!
   addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
   removeCourse(id: Int!): Course!
+  createAttachment(createAttachmentInput: CreateAttachmentInput!): Attachment!
+  updateAttachment(updateAttachmentInput: UpdateAttachmentInput!, id: Int!): Attachment!
+  removeAttachment(id: Int!): Attachment!
   createLearningLine(createLearningLineInput: CreateLearningLineInput!): LearningLine!
   updateLearningLine(updateLearningLineInput: UpdateLearningLineInput!, id: Int!): LearningLine!
   removeLearningLine(id: Int!): LearningLine!
@@ -357,6 +380,28 @@ input UpdateCourseInput {
 
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
+}
+
+input CreateAttachmentInput {
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
+input UpdateAttachmentInput {
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
 }
 
 input CreateLearningLineInput {

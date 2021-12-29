@@ -6,6 +6,8 @@ import { UpdateProjectInput } from './dto/update-project.input';
 import { ProjectsService } from './projects.service';
 import { Course } from 'src/courses/entities/course.entity';
 import { Person } from 'src/persons/entities/person.entity';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
+import { CreateAttachmentInput } from 'src/attachments/dto/create-attachment.input';
 
 @Resolver(() => Project)
 export class ProjectsResolver {
@@ -14,6 +16,16 @@ export class ProjectsResolver {
   @Mutation(() => Project)
   createProject(@Args('createProjectInput') createProjectInput: CreateProjectInput): Promise<Project> {
     return this.projectsService.create(createProjectInput);
+  }
+
+  @Mutation(() => Project)
+  addAttachmentsToProject(
+    @Args('projectId', { type: () => Int }) 
+    projectId: number,
+    @Args('attachments', { type: () => [Int] }) 
+    attachments: number[]
+  ): Promise<Project> {
+    return this.projectsService.addAttachmentsToProject(projectId, attachments);
   }
 
   @Mutation(() => Project)
@@ -34,6 +46,13 @@ export class ProjectsResolver {
   @Query(() => Project, { name: 'project' })
   findOne(@Args('id', { type: () => Int }) id: number): Promise<Project> {
     return this.projectsService.findOneById(id);
+  }
+
+  @ResolveField(() => [Attachment])
+  attachments(
+    @Parent() project: Project,
+  ): Promise<Attachment[]> {
+    return this.projectsService.getAttachments(project.id);
   }
 
   @ResolveField(() => Course)

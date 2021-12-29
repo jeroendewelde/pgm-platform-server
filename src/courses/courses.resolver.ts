@@ -6,6 +6,7 @@ import { UpdateCourseInput } from './dto/update-course.input';
 import { CoursesService } from './courses.service';
 import { Project } from 'src/projects/entities/project.entity';
 import { Person } from 'src/persons/entities/person.entity';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -14,6 +15,16 @@ export class CoursesResolver {
   @Mutation(() => Course)
   createCourse(@Args('createCourseInput') createCourseInput: CreateCourseInput): Promise<Course> {
     return this.coursesService.create(createCourseInput);
+  }
+
+  @Mutation(() => Course)
+  addAttachmentsToCourse(
+    @Args('courseId', { type: () => Int }) 
+    courseId: number,
+    @Args('attachments', { type: () => [Int] }) 
+    attachments: number[]
+  ): Promise<Course> {
+    return this.coursesService.addAttachmentsToCourse(courseId, attachments);
   }
 
   @Mutation(() => Course)
@@ -34,6 +45,13 @@ export class CoursesResolver {
   @Query(() => Course, { name: 'course' })
   findOne(@Args('id', { type: () => Int }) id: number): Promise<Course> {
     return this.coursesService.findOneById(id);
+  }
+
+  @ResolveField(() => [Attachment])
+  attachments(
+    @Parent() course: Course,
+  ): Promise<Attachment[]> {
+    return this.coursesService.getAttachments(course.id);
   }
 
   @Query(() => [Course], { name: 'coursesByLearningLineId' })

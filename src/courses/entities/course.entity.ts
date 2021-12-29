@@ -1,4 +1,5 @@
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+import { Attachment } from 'src/attachments/entities/attachment.entity';
 import { LearningLine } from 'src/learning-lines/entities/learning-line.entity';
 import { Person } from 'src/persons/entities/person.entity';
 import { Project } from 'src/projects/entities/project.entity';
@@ -40,6 +41,10 @@ export class Course {
   @ManyToMany(() => Person, person => person.courses, { nullable: true })
   @JoinTable({name: 'courses_have_teachers'})
   teachers: Person[]
+
+  @ManyToMany(() => Attachment, attachment => attachment.courses, { nullable: true, cascade: true })
+  @JoinTable({name: 'courses_have_attachments'})
+  attachments?: Attachment[]
 
   @ManyToOne(() => LearningLine, LearningLine => LearningLine.courses, { onDelete: 'CASCADE' })
   @Field(() => LearningLine, { description: 'The learning line this course belongs to' })
