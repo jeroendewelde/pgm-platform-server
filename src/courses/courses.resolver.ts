@@ -36,6 +36,11 @@ export class CoursesResolver {
     return this.coursesService.findOneById(id);
   }
 
+  @Query(() => [Course], { name: 'coursesByLearningLineId' })
+  findAllByLearningLineId(@Args('learningLineId', { type: () => Int }) learningLineId: number): Promise<Course[]> {
+    return this.coursesService.findByLearningLineId(learningLineId);
+  }
+
   @ResolveField(returns => [Project])
   projects(@Parent() course: Course): Promise<Project[]> {
     return this.coursesService.getProjects(course.id);

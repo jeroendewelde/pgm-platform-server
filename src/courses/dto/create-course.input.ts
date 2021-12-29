@@ -28,4 +28,7 @@ export class CreateCourseInput {
   @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2020-2021'"})
   @Field(() => String, { description: 'The academic year of the project' })
   academicYear: string
+
+  @Field(() => Int, { description: 'The ID of the learning line this project belongs to' })
+  learningLineId: number
 }

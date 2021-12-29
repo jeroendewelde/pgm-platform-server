@@ -9,6 +9,7 @@ import { PersonsModule } from 'src/persons/persons.module';
 @Module({
   imports: [
     TypeOrmModule.forFeature([Course]),
+    // LearningLinesModule,
     forwardRef(() => ProjectsModule),
     PersonsModule
   ],

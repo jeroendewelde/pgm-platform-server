@@ -46,6 +46,24 @@ export class CoursesService {
   findOneById(id: number): Promise<Course> {
     return this.courseRepository.findOneOrFail(id);
   }
+  
+  findByLearningLineId(learningLineId: number): Promise<Course[]> {
+    console.log('learling line ID...', learningLineId);
+    return this.courseRepository.find({
+      where: {
+        learningLineId : learningLineId
+      }
+    })
+  }
+
+  // findByLearningLineId(learningLineId: number): Promise<Course[]> {
+  //   return this.courseRepository.find({
+  //     where: {
+  //       learningLineId
+  //     }
+  //   })
+  // }
+
 
   getProjects(courseId: number): Promise<Project[]> {
     return this.projectService.findByCourseId(courseId);

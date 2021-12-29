@@ -14,7 +14,7 @@ export class PersonsResolver {
   ) {}
 
   @Mutation(() => Person)
-  createPerson(@Args('createPersonInput') createPersonInput: CreatePersonInput) {
+  createPerson(@Args('createPersonInput') createPersonInput: CreatePersonInput): Promise<Person> {
     return this.personsService.create(createPersonInput);
   }
 
@@ -39,7 +39,7 @@ export class PersonsResolver {
     id: number,
     @Args('updatePersonInput') 
     updatePersonInput: UpdatePersonInput
-  ) {
+  ): Promise<Person> {
     return this.personsService.update(id, updatePersonInput);
   }
 

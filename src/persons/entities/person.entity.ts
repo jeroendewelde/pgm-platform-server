@@ -1,8 +1,9 @@
+import { Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { ObjectType, Field, Int } from '@nestjs/graphql';
+
 import { Course } from 'src/courses/entities/course.entity';
 import { PersonInformation } from 'src/person-informations/entities/person-information.entity';
 import { Project } from 'src/projects/entities/project.entity';
-import { Column, Entity, ManyToMany, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 
 import { PersonType } from '../../scalars/person-type.scalar';
 

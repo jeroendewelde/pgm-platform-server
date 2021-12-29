@@ -2,6 +2,20 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
+type LearningLine {
+  """The ID of the learning line"""
+  id: Int!
+
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+
+  """The List of courses made for this learning line"""
+  courses: [Course!]!
+}
+
 type Project {
   """The ID of the project"""
   id: Int!
@@ -42,8 +56,14 @@ type Course {
   """The academic year of the project"""
   academicYear: String!
 
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+
   """The List of projects made for this course"""
   projects: [Project!]
+
+  """The learning line this course belongs to"""
+  learningLine: LearningLine!
   teachers: [Person!]!
 }
 
@@ -146,6 +166,9 @@ type Query {
   project(id: Int!): Project!
   courses: [Course!]!
   course(id: Int!): Course!
+  coursesByLearningLineId(learningLineId: Int!): [Course!]!
+  learningLines: [LearningLine!]!
+  learningLine(id: Int!): LearningLine!
 }
 
 type Mutation {
@@ -169,6 +192,9 @@ type Mutation {
   addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
   removeCourse(id: Int!): Course!
+  createLearningLine(createLearningLineInput: CreateLearningLineInput!): LearningLine!
+  updateLearningLine(updateLearningLineInput: UpdateLearningLineInput!, id: Int!): LearningLine!
+  removeLearningLine(id: Int!): LearningLine!
 }
 
 input CreatePersonInput {
@@ -311,6 +337,9 @@ input CreateCourseInput {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
 }
 
 input UpdateCourseInput {
@@ -325,4 +354,23 @@ input UpdateCourseInput {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+}
+
+input CreateLearningLineInput {
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+}
+
+input UpdateLearningLineInput {
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
 }

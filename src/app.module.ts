@@ -26,6 +26,8 @@ import { ProjectsModule } from './projects/projects.module';
 import { Project } from './projects/entities/project.entity';
 import { CoursesModule } from './courses/courses.module';
 import { Course } from './courses/entities/course.entity';
+import { LearningLinesModule } from './learning-lines/learning-lines.module';
+import { LearningLine } from './learning-lines/entities/learning-line.entity';
 
 @Module({
   imports: [
@@ -46,13 +48,14 @@ import { Course } from './courses/entities/course.entity';
       [
         Course,
         FieldExperience,
+        LearningLine,
         Person,
         Project,
         PersonInformation,
         SocialMedia
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, ],
   controllers: [AppController],
   providers: [AppService],
 })
