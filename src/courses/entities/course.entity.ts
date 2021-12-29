@@ -3,6 +3,7 @@ import { Attachment } from 'src/attachments/entities/attachment.entity';
 import { LearningLine } from 'src/learning-lines/entities/learning-line.entity';
 import { Person } from 'src/persons/entities/person.entity';
 import { Project } from 'src/projects/entities/project.entity';
+import { Specialisation } from 'src/specialisations/entities/specialisation.entity';
 import { Column, Entity, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
@@ -32,6 +33,9 @@ export class Course {
   @Field(() => Int, { description: 'The ID of the learning line this project belongs to' })
   learningLineId: number
 
+  @Column()
+  @Field(() => Int, { description: 'The ID of the specialisation this project belongs to', nullable: true })
+  specialisationId?: number
 
   // Relations
   @OneToMany(type => Project, project => project.course, { cascade: true })
@@ -49,4 +53,8 @@ export class Course {
   @ManyToOne(() => LearningLine, LearningLine => LearningLine.courses, { onDelete: 'CASCADE' })
   @Field(() => LearningLine, { description: 'The learning line this course belongs to' })
   learningLine: LearningLine
+
+  @ManyToOne(() => Specialisation, specialisation => specialisation.courses, { onDelete: 'CASCADE', nullable: true })
+  @Field(() => Specialisation, { description: 'The specialisation this course belongs to', nullable: true })
+  specialisation?: Specialisation
 }

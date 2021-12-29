@@ -30,6 +30,10 @@ import { LearningLinesModule } from './learning-lines/learning-lines.module';
 import { LearningLine } from './learning-lines/entities/learning-line.entity';
 import { AttachmentsModule } from './attachments/attachments.module';
 import { Attachment } from './attachments/entities/attachment.entity';
+import { SpecialisationsModule } from './specialisations/specialisations.module';
+import { Specialisation } from './specialisations/entities/specialisation.entity';
+import { GenerationsModule } from './generations/generations.module';
+import { Generation } from './generations/entities/generation.entity';
 
 @Module({
   imports: [
@@ -51,14 +55,16 @@ import { Attachment } from './attachments/entities/attachment.entity';
         Attachment,
         Course,
         FieldExperience,
+        Generation,
         LearningLine,
         Person,
         Project,
         PersonInformation,
-        SocialMedia
+        SocialMedia,
+        Specialisation,
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, ],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

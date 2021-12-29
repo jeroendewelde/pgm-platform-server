@@ -55,6 +55,20 @@ type LearningLine {
   courses: [Course!]!
 }
 
+type Specialisation {
+  """The ID of the specialisation"""
+  id: Int!
+
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+
+  """The List of courses made for this specialisation"""
+  courses: [Course!]
+}
+
 type Course {
   """The ID of the course"""
   id: Int!
@@ -74,11 +88,17 @@ type Course {
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
 
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int
+
   """The List of projects made for this course"""
   projects: [Project!]
 
   """The learning line this course belongs to"""
   learningLine: LearningLine!
+
+  """The specialisation this course belongs to"""
+  specialisation: Specialisation
   attachments: [Attachment!]!
   teachers: [Person!]!
 }
@@ -148,6 +168,20 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Generation {
+  """The ID of the generation"""
+  id: Int!
+
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
+
+  """The List of students in this generation"""
+  students: [Person!]!
+}
+
 type Person {
   """The ID of the person"""
   id: Int!
@@ -160,7 +194,13 @@ type Person {
 
   """The type of the person"""
   type: PersonType!
+
+  """The generation this students belongs to"""
+  generationId: Int
   personInformation: PersonInformation
+
+  """The generation this student belongs to"""
+  generation: Generation
 }
 
 """The type of the person"""
@@ -187,6 +227,10 @@ type Query {
   attachment(id: Int!): Attachment!
   learningLines: [LearningLine!]!
   learningLine(id: Int!): LearningLine!
+  specialisations: [Specialisation!]!
+  specialisation(id: Int!): Specialisation!
+  generations: [Generation!]!
+  generation(id: Int!): Generation!
 }
 
 type Mutation {
@@ -218,6 +262,12 @@ type Mutation {
   createLearningLine(createLearningLineInput: CreateLearningLineInput!): LearningLine!
   updateLearningLine(updateLearningLineInput: UpdateLearningLineInput!, id: Int!): LearningLine!
   removeLearningLine(id: Int!): LearningLine!
+  createSpecialisation(createSpecialisationInput: CreateSpecialisationInput!): Specialisation!
+  updateSpecialisation(updateSpecialisationInput: UpdateSpecialisationInput!, id: Int!): Specialisation!
+  removeSpecialisation(id: Int!): Specialisation!
+  createGeneration(createGenerationInput: CreateGenerationInput!): Generation!
+  updateGeneration(updateGenerationInput: UpdateGenerationInput!, id: Int!): Generation!
+  removeGeneration(id: Int!): Generation!
 }
 
 input CreatePersonInput {
@@ -229,17 +279,21 @@ input CreatePersonInput {
 
   """The type of the person"""
   type: PersonType!
+  generationId: Int
 }
 
 input UpdatePersonInput {
   """The first name of the person"""
-  firstName: String
+  firstName: String!
 
   """The last name of the person"""
-  lastName: String
+  lastName: String!
 
   """The type of the person"""
-  type: PersonType
+  type: PersonType!
+
+  """The generation this student belongs to"""
+  generationId: Int
 }
 
 input CreatePersonInformationInput {
@@ -363,6 +417,9 @@ input CreateCourseInput {
 
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int = null
 }
 
 input UpdateCourseInput {
@@ -380,6 +437,9 @@ input UpdateCourseInput {
 
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int = null
 }
 
 input CreateAttachmentInput {
@@ -418,4 +478,36 @@ input UpdateLearningLineInput {
 
   """The color of the learning line"""
   color: String!
+}
+
+input CreateSpecialisationInput {
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+}
+
+input UpdateSpecialisationInput {
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+}
+
+input CreateGenerationInput {
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
+}
+
+input UpdateGenerationInput {
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
 }

@@ -19,4 +19,8 @@ export class CreatePersonInput {
   @IsString()
   @Field(() => PersonType, { description: 'The type of the person' })
   type: PersonType
+
+  // Relations
+  @Field(() => Int, { nullable: true })
+  generationId?: number
 }

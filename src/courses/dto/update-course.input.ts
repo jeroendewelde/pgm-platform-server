@@ -32,4 +32,7 @@ export class UpdateCourseInput extends PartialType(CreateCourseInput) {
 
   @Field(() => Int, { description: 'The ID of the learning line this project belongs to' })
   learningLineId: number
+
+  @Field(() => Int, { description: 'The ID of the specialisation this project belongs to', nullable: true })
+  specialisationId?: number = null
 }
