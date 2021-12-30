@@ -31,6 +31,10 @@ export class Project {
   @Field(() => Int, { description: 'The ID of the course this project was made for' })
   courseId: number
 
+  @Column( 'text', { nullable: true, array: true })
+  @Field(() => [String], { description: 'List of tags for the project', nullable: true })
+  tags?: string[]
+
   // Relations
   @ManyToOne(() => Course, course => course.projects, { onDelete: 'CASCADE' })
   @Field(() => Course, { description: 'The course this project belongs to' })

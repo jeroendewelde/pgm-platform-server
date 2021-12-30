@@ -21,6 +21,9 @@ type Project {
   """The ID of the course this project was made for"""
   courseId: Int!
 
+  """List of tags for the project"""
+  tags: [String!]
+
   """The course this project belongs to"""
   course: Course!
   attachments: [Attachment!]!
@@ -464,6 +467,9 @@ input CreateProjectInput {
   """The academic year of the project"""
   academicYear: String!
 
+  """List of tags for the project"""
+  tags: [String!]
+
   """The ID of the course this project was made for"""
   courseId: Int!
 }
@@ -480,6 +486,9 @@ input UpdateProjectInput {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
 
   """The ID of the course this project was made for"""
   courseId: Int!

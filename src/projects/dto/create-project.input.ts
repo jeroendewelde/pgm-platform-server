@@ -26,6 +26,9 @@ export class CreateProjectInput {
   @Field(() => String, { description: 'The academic year of the project' })
   academicYear: string
 
+  @Field(() => [String], { description: 'List of tags for the project', nullable: true })
+  tags?: string[]
+
   @Field(() => Int, { description: 'The ID of the course this project was made for' })
   courseId: number
 }
