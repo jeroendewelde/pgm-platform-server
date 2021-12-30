@@ -151,6 +151,8 @@ type PersonInformation {
   """The bio for this person"""
   bio: String
   dob: DateTime!
+
+  """The ID of the person this information belongs to"""
   personId: Int!
 
   """The person this person information belongs to"""
@@ -182,6 +184,46 @@ type Generation {
   students: [Person!]!
 }
 
+type Company {
+  """The ID of the company"""
+  id: Int!
+
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+
+  """The list of interns who worked at this company"""
+  interns: [Intern!]
+}
+
+type Intern {
+  """The ID of the intern"""
+  id: Int!
+
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+
+  """The student this intern belongs to"""
+  student: Person!
+
+  """The company this intern worked at"""
+  company: Company
+}
+
 type Person {
   """The ID of the person"""
   id: Int!
@@ -198,6 +240,7 @@ type Person {
   """The generation this students belongs to"""
   generationId: Int
   personInformation: PersonInformation
+  intern: Intern
 
   """The generation this student belongs to"""
   generation: Generation
@@ -231,6 +274,10 @@ type Query {
   specialisation(id: Int!): Specialisation!
   generations: [Generation!]!
   generation(id: Int!): Generation!
+  companies: [Company!]!
+  company(id: Int!): Company!
+  interns: [Intern!]!
+  intern(id: Int!): Intern!
 }
 
 type Mutation {
@@ -268,6 +315,12 @@ type Mutation {
   createGeneration(createGenerationInput: CreateGenerationInput!): Generation!
   updateGeneration(updateGenerationInput: UpdateGenerationInput!, id: Int!): Generation!
   removeGeneration(id: Int!): Generation!
+  createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  updateCompany(updateCompanyInput: UpdateCompanyInput!, id: Int!): Company!
+  removeCompany(id: Int!): Company!
+  createIntern(createInternInput: CreateInternInput!): Intern!
+  updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
+  removeIntern(id: Int!): Intern!
 }
 
 input CreatePersonInput {
@@ -510,4 +563,54 @@ input UpdateGenerationInput {
 
   """The years of the generation"""
   years: String!
+}
+
+input CreateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+}
+
+input UpdateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+}
+
+input CreateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+}
+
+input UpdateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
 }

@@ -25,7 +25,7 @@ export class PersonInformation {
   dob?: Date;
 
   @Column()
-  @Field(type => Int)
+  @Field(type => Int, { description: 'The ID of the person this information belongs to' })
   personId: number;
 
   // Relations

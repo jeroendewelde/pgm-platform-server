@@ -7,6 +7,7 @@ import { Project } from 'src/projects/entities/project.entity';
 
 import { PersonType } from '../../scalars/person-type.scalar';
 import { Generation } from 'src/generations/entities/generation.entity';
+import { Intern } from 'src/interns/entities/intern.entity';
 
 @Entity()
 @ObjectType()
@@ -35,6 +36,10 @@ export class Person {
   @OneToOne(type => PersonInformation, personInformation => personInformation.person)
   @Field(type => PersonInformation, { nullable: true })
   personInformation?: PersonInformation
+
+  @OneToOne(type => Intern, intern => intern.student)
+  @Field(type => Intern, { nullable: true })
+  intern?: Intern
 
   @ManyToOne(() => Generation, generation => generation.students, { onDelete: 'CASCADE' })
   @Field(() => Generation, { description: 'The generation this student belongs to', nullable: true })

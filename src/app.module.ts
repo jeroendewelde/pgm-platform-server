@@ -34,6 +34,10 @@ import { SpecialisationsModule } from './specialisations/specialisations.module'
 import { Specialisation } from './specialisations/entities/specialisation.entity';
 import { GenerationsModule } from './generations/generations.module';
 import { Generation } from './generations/entities/generation.entity';
+import { CompaniesModule } from './companies/companies.module';
+import { Company } from './companies/entities/company.entity';
+import { InternsModule } from './interns/interns.module';
+import { Intern } from './interns/entities/intern.entity';
 
 @Module({
   imports: [
@@ -53,9 +57,11 @@ import { Generation } from './generations/entities/generation.entity';
     TypeOrmModule.forFeature(
       [
         Attachment,
+        Company,
         Course,
         FieldExperience,
         Generation,
+        Intern,
         LearningLine,
         Person,
         Project,
@@ -64,7 +70,7 @@ import { Generation } from './generations/entities/generation.entity';
         Specialisation,
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, ],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, CompaniesModule, InternsModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

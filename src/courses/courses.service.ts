@@ -62,7 +62,6 @@ export class CoursesService {
   }
   
   findByLearningLineId(learningLineId: number): Promise<Course[]> {
-    console.log('learling line ID...', learningLineId);
     return this.courseRepository.find({
       where: {
         learningLineId : learningLineId
