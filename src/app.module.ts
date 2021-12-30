@@ -38,6 +38,8 @@ import { CompaniesModule } from './companies/companies.module';
 import { Company } from './companies/entities/company.entity';
 import { InternsModule } from './interns/interns.module';
 import { Intern } from './interns/entities/intern.entity';
+import { UsersModule } from './users/users.module';
+import { User } from './users/entities/user.entity';
 
 @Module({
   imports: [
@@ -68,9 +70,10 @@ import { Intern } from './interns/entities/intern.entity';
         PersonInformation,
         SocialMedia,
         Specialisation,
+        User,
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, CompaniesModule, InternsModule, ],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, CompaniesModule, InternsModule, UsersModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

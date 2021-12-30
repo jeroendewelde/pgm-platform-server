@@ -252,6 +252,31 @@ enum PersonType {
   TEACHER
 }
 
+type User {
+  """The ID of the user"""
+  id: Int!
+
+  """The name of the user"""
+  name: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+
+  """The role of the user"""
+  role: Role!
+}
+
+"""The role of the user"""
+enum Role {
+  ADMIN
+  STUDENT
+  TEACHER
+  LINEADMIN
+}
+
 type Query {
   persons: [Person!]!
   person(id: Int!): Person!
@@ -278,6 +303,8 @@ type Query {
   company(id: Int!): Company!
   interns: [Intern!]!
   intern(id: Int!): Intern!
+  users: [User!]!
+  user(id: Int!): User!
 }
 
 type Mutation {
@@ -321,6 +348,9 @@ type Mutation {
   createIntern(createInternInput: CreateInternInput!): Intern!
   updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
   removeIntern(id: Int!): Intern!
+  createUser(createUserInput: CreateUserInput!): User!
+  updateUser(updateUserInput: UpdateUserInput!, id: Int!): User!
+  removeUser(id: Int!): User!
 }
 
 input CreatePersonInput {
@@ -613,4 +643,38 @@ input UpdateInternInput {
 
   """The ID of the company this intern worked at"""
   companyId: Int
+}
+
+input CreateUserInput {
+  """The ID of the user"""
+  id: Int!
+
+  """The name of the user"""
+  name: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+
+  """The role of the user"""
+  role: Role!
+}
+
+input UpdateUserInput {
+  """The ID of the user"""
+  id: Int!
+
+  """The name of the user"""
+  name: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+
+  """The role of the user"""
+  role: Role!
 }
