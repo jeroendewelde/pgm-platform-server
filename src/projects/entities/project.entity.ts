@@ -26,14 +26,14 @@ export class Project {
   @Column()
   @Field(() => String, { description: 'The academic year of the project' })
   academicYear: string
+  
+  @Column( 'text', { nullable: true, array: true })
+  @Field(() => [String], { description: 'List of tags for the project', nullable: true })
+  tags?: string[]
 
   @Column()
   @Field(() => Int, { description: 'The ID of the course this project was made for' })
   courseId: number
-
-  @Column( 'text', { nullable: true, array: true })
-  @Field(() => [String], { description: 'List of tags for the project', nullable: true })
-  tags?: string[]
 
   // Relations
   @ManyToOne(() => Course, course => course.projects, { onDelete: 'CASCADE' })

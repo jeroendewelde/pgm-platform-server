@@ -30,6 +30,9 @@ export class UpdateCourseInput extends PartialType(CreateCourseInput) {
   @Field(() => String, { description: 'The academic year of the project' })
   academicYear: string
 
+  @Field(() => [String], { description: 'List of tags for the course', nullable: true })
+  tags?: string[]
+
   @Field(() => Int, { description: 'The ID of the learning line this project belongs to' })
   learningLineId: number
 

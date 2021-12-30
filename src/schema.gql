@@ -18,11 +18,11 @@ type Project {
   """The academic year of the project"""
   academicYear: String!
 
-  """The ID of the course this project was made for"""
-  courseId: Int!
-
   """List of tags for the project"""
   tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
 
   """The course this project belongs to"""
   course: Course!
@@ -87,6 +87,9 @@ type Course {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """List of tags for the course"""
+  tags: [String!]
 
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
@@ -507,6 +510,9 @@ input CreateCourseInput {
   """The academic year of the project"""
   academicYear: String!
 
+  """List of tags for the course"""
+  tags: [String!]
+
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
 
@@ -526,6 +532,9 @@ input UpdateCourseInput {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """List of tags for the course"""
+  tags: [String!]
 
   """The ID of the learning line this project belongs to"""
   learningLineId: Int!
