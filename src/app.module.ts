@@ -40,6 +40,7 @@ import { InternsModule } from './interns/interns.module';
 import { Intern } from './interns/entities/intern.entity';
 import { UsersModule } from './users/users.module';
 import { User } from './users/entities/user.entity';
+import { AuthModule } from './auth/auth.module';
 
 @Module({
   imports: [
@@ -73,7 +74,7 @@ import { User } from './users/entities/user.entity';
         User,
       ]
     ),
-    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, CompaniesModule, InternsModule, UsersModule, ],
+    PersonsModule, PersonInformationsModule, SocialMediasModule, FieldExperiencesModule, ProjectsModule, CoursesModule, LearningLinesModule, AttachmentsModule, SpecialisationsModule, GenerationsModule, CompaniesModule, InternsModule, UsersModule, AuthModule, ],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -25,6 +25,14 @@ export class UsersService {
     return this.userRepository.findOneOrFail(id);
   }
 
+  findOneByUsername(username: string): Promise<User> {
+    return this.userRepository.findOneOrFail({
+      where: {
+        username: username,
+      },
+    });
+  }
+
   update(id: number, updateUserInput: UpdateUserInput): Promise<User> {
     return this.userRepository.save({
       id: id,

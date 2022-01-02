@@ -263,7 +263,7 @@ type User {
   id: Int!
 
   """The name of the user"""
-  name: String!
+  username: String!
 
   """The email of the user"""
   email: String!
@@ -281,6 +281,11 @@ enum Role {
   STUDENT
   TEACHER
   LINEADMIN
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
 }
 
 type Query {
@@ -354,9 +359,9 @@ type Mutation {
   createIntern(createInternInput: CreateInternInput!): Intern!
   updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
   removeIntern(id: Int!): Intern!
-  createUser(createUserInput: CreateUserInput!): User!
   updateUser(updateUserInput: UpdateUserInput!, id: Int!): User!
   removeUser(id: Int!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
 }
 
 input CreatePersonInput {
@@ -663,12 +668,12 @@ input UpdateInternInput {
   companyId: Int
 }
 
-input CreateUserInput {
+input UpdateUserInput {
   """The ID of the user"""
   id: Int!
 
   """The name of the user"""
-  name: String!
+  username: String!
 
   """The email of the user"""
   email: String!
@@ -680,19 +685,7 @@ input CreateUserInput {
   role: Role!
 }
 
-input UpdateUserInput {
-  """The ID of the user"""
-  id: Int!
-
-  """The name of the user"""
-  name: String!
-
-  """The email of the user"""
-  email: String!
-
-  """The password of the user"""
+input LoginUserInput {
+  username: String!
   password: String!
-
-  """The role of the user"""
-  role: Role!
 }

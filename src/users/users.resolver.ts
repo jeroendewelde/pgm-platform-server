@@ -1,20 +1,29 @@
-import { Resolver, Query, Mutation, Args, Int } from '@nestjs/graphql';
+import { Resolver, Query, Mutation, Args, Int, Context } from '@nestjs/graphql';
 import { UsersService } from './users.service';
 import { User } from './entities/user.entity';
 import { CreateUserInput } from './dto/create-user.input';
 import { UpdateUserInput } from './dto/update-user.input';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+
+
 
 @Resolver(() => User)
 export class UsersResolver {
   constructor(private readonly usersService: UsersService) {}
 
-  @Mutation(() => User)
-  createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
-    return this.usersService.create(createUserInput);
-  }
+  // @Mutation(() => User)
+  // createUser(@Args('createUserInput') createUserInput: CreateUserInput): Promise<User> {
+  //   return this.usersService.create(createUserInput);
+  // }
 
+  
   @Query(() => [User], { name: 'users' })
-  findAll(): Promise<User[]> {
+  @UseGuards(JwtAuthGuard)
+  // findAll(): Promise<User[]> {
+  findAll(@Context() context): Promise<User[]> {
+    console.log('context', context);
+    // in context will be the user which is given from the strategy
     return this.usersService.findAll();
   }
 

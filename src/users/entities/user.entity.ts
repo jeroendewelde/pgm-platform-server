@@ -11,7 +11,7 @@ export class User {
 
   @Column()
   @Field(() => String, { description: 'The name of the user' })
-  name: string
+  username: string
 
   @Column()
   @Field(() => String, { description: 'The email of the user' })

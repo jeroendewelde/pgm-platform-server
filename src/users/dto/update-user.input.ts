@@ -8,7 +8,7 @@ export class UpdateUserInput extends PartialType(CreateUserInput) {
   id: number
 
   @Field(() => String, { description: 'The name of the user' })
-  name: string
+  username: string
 
   @Field(() => String, { description: 'The email of the user' })
   email: string
