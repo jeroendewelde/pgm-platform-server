@@ -29,7 +29,7 @@ export const config = () => ({
 
         
       
-      // sslmode: 'require',
+      sslmode: 'require',
   },
   databaseDev: {  
       type: 'postgres',
