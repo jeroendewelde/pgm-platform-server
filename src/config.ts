@@ -9,7 +9,7 @@ export const config = () => ({
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-      ssl: true,
+      // ssl: true,
       extra: {
         ssl: {
           rejectUnauthorized: false
