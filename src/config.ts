@@ -9,10 +9,14 @@ export const config = () => ({
       entities: ['dist/**/*.entity{.ts,.js}'],
       autoLoadEntities: true,
       synchronize: true,
-      // extra: {
+      ssl: true,
+      extra: {
         ssl: {
           rejectUnauthorized: false
         },
+      }
+        
+        
       // },
       // ssl: 'no-verify',
       // ssl: {
@@ -30,6 +34,7 @@ export const config = () => ({
         
       
       // sslmode: 'require',
+      // sslmode: 'no-verify',
   },
   databaseDev: {  
       type: 'postgres',
