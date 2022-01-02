@@ -1,0 +1,689 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type Project {
+  """The ID of the project"""
+  id: Int!
+
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """The course this project belongs to"""
+  course: Course!
+  attachments: [Attachment!]!
+  students: [Person!]!
+}
+
+type Attachment {
+  """The ID of the attachment"""
+  id: Int!
+
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
+type LearningLine {
+  """The ID of the learning line"""
+  id: Int!
+
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+
+  """The List of courses made for this learning line"""
+  courses: [Course!]!
+}
+
+type Specialisation {
+  """The ID of the specialisation"""
+  id: Int!
+
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+
+  """The List of courses made for this specialisation"""
+  courses: [Course!]
+}
+
+type Course {
+  """The ID of the course"""
+  id: Int!
+
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the course"""
+  tags: [String!]
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int
+
+  """The List of projects made for this course"""
+  projects: [Project!]
+
+  """The learning line this course belongs to"""
+  learningLine: LearningLine!
+
+  """The specialisation this course belongs to"""
+  specialisation: Specialisation
+  attachments: [Attachment!]!
+  teachers: [Person!]!
+}
+
+type SocialMedia {
+  """The ID of this social media information"""
+  id: Int!
+
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+
+  """The ID of the person this social media belongs to"""
+  personId: Int!
+
+  """The person this social media belongs to"""
+  person: PersonInformation!
+}
+
+type FieldExperience {
+  """The ID of the field experience"""
+  id: Int!
+
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int
+
+  """The person this field experience belongs to"""
+  person: PersonInformation!
+}
+
+type PersonInformation {
+  """The ID of the person information"""
+  id: Int!
+
+  """The quote for this person"""
+  quote: String
+
+  """The bio for this person"""
+  bio: String
+  dob: DateTime!
+
+  """The ID of the person this information belongs to"""
+  personId: Int!
+
+  """The person this person information belongs to"""
+  person: Person
+
+  """List of social media for this person"""
+  socialMedias: [SocialMedia!]
+
+  """List of field experiences for this person"""
+  fieldExperiences: [FieldExperience!]
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Generation {
+  """The ID of the generation"""
+  id: Int!
+
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
+
+  """The List of students in this generation"""
+  students: [Person!]!
+}
+
+type Company {
+  """The ID of the company"""
+  id: Int!
+
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+
+  """The list of interns who worked at this company"""
+  interns: [Intern!]
+}
+
+type Intern {
+  """The ID of the intern"""
+  id: Int!
+
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+
+  """The student this intern belongs to"""
+  student: Person!
+
+  """The company this intern worked at"""
+  company: Company
+}
+
+type Person {
+  """The ID of the person"""
+  id: Int!
+
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+
+  """The generation this students belongs to"""
+  generationId: Int
+  personInformation: PersonInformation
+  intern: Intern
+
+  """The generation this student belongs to"""
+  generation: Generation
+}
+
+"""The type of the person"""
+enum PersonType {
+  STUDENT
+  TEACHER
+}
+
+type User {
+  """The ID of the user"""
+  id: Int!
+
+  """The name of the user"""
+  username: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+
+  """The role of the user"""
+  role: Role!
+}
+
+"""The role of the user"""
+enum Role {
+  ADMIN
+  STUDENT
+  TEACHER
+  LINEADMIN
+}
+
+type LoginResponse {
+  access_token: String!
+  user: User!
+}
+
+type Query {
+  persons: [Person!]!
+  person(id: Int!): Person!
+  personInformations: [PersonInformation!]!
+  personInformation(id: Int!): PersonInformation!
+  fieldExperiences: [FieldExperience!]!
+  fieldExperience(id: Int!): FieldExperience!
+  socialMedias: [SocialMedia!]!
+  socialMedia(id: Int!): SocialMedia!
+  projects: [Project!]!
+  project(id: Int!): Project!
+  courses: [Course!]!
+  course(id: Int!): Course!
+  coursesByLearningLineId(learningLineId: Int!): [Course!]!
+  attachments: [Attachment!]!
+  attachment(id: Int!): Attachment!
+  learningLines: [LearningLine!]!
+  learningLine(id: Int!): LearningLine!
+  specialisations: [Specialisation!]!
+  specialisation(id: Int!): Specialisation!
+  generations: [Generation!]!
+  generation(id: Int!): Generation!
+  companies: [Company!]!
+  company(id: Int!): Company!
+  interns: [Intern!]!
+  intern(id: Int!): Intern!
+  users: [User!]!
+  user(id: Int!): User!
+}
+
+type Mutation {
+  createPerson(createPersonInput: CreatePersonInput!): Person!
+  updatePerson(updatePersonInput: UpdatePersonInput!, id: Int!): Person!
+  removePerson(id: Int!): Person!
+  createPersonInformation(createPersonInformationInput: CreatePersonInformationInput!): PersonInformation!
+  updatePersonInformation(updatePersonInformationInput: UpdatePersonInformationInput!, id: Int!): PersonInformation!
+  removePersonInformation(id: Int!): PersonInformation!
+  createFieldExperience(createFieldExperienceInput: CreateFieldExperienceInput!): FieldExperience!
+  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: Int!): FieldExperience!
+  removeFieldExperience(id: Int!): FieldExperience!
+  createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
+  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
+  removeSocialMedia(id: Int!): SocialMedia!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  addAttachmentsToProject(attachments: [Int!]!, projectId: Int!): Project!
+  addStudentsToProject(studentIds: [Int!]!, projectId: Int!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
+  removeProject(id: Int!): Project!
+  createCourse(createCourseInput: CreateCourseInput!): Course!
+  addAttachmentsToCourse(attachments: [Int!]!, courseId: Int!): Course!
+  addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
+  updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
+  removeCourse(id: Int!): Course!
+  createAttachment(createAttachmentInput: CreateAttachmentInput!): Attachment!
+  updateAttachment(updateAttachmentInput: UpdateAttachmentInput!, id: Int!): Attachment!
+  removeAttachment(id: Int!): Attachment!
+  createLearningLine(createLearningLineInput: CreateLearningLineInput!): LearningLine!
+  updateLearningLine(updateLearningLineInput: UpdateLearningLineInput!, id: Int!): LearningLine!
+  removeLearningLine(id: Int!): LearningLine!
+  createSpecialisation(createSpecialisationInput: CreateSpecialisationInput!): Specialisation!
+  updateSpecialisation(updateSpecialisationInput: UpdateSpecialisationInput!, id: Int!): Specialisation!
+  removeSpecialisation(id: Int!): Specialisation!
+  createGeneration(createGenerationInput: CreateGenerationInput!): Generation!
+  updateGeneration(updateGenerationInput: UpdateGenerationInput!, id: Int!): Generation!
+  removeGeneration(id: Int!): Generation!
+  createCompany(createCompanyInput: CreateCompanyInput!): Company!
+  updateCompany(updateCompanyInput: UpdateCompanyInput!, id: Int!): Company!
+  removeCompany(id: Int!): Company!
+  createIntern(createInternInput: CreateInternInput!): Intern!
+  updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
+  removeIntern(id: Int!): Intern!
+  updateUser(updateUserInput: UpdateUserInput!, id: Int!): User!
+  removeUser(id: Int!): User!
+  login(loginUserInput: LoginUserInput!): LoginResponse!
+  signup(loginUserInput: LoginUserInput!): User!
+}
+
+input CreatePersonInput {
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+  generationId: Int
+}
+
+input UpdatePersonInput {
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+
+  """The generation this student belongs to"""
+  generationId: Int
+}
+
+input CreatePersonInformationInput {
+  """The quote for this person"""
+  quote: String
+
+  """The bio for this person"""
+  bio: String
+
+  """Date of birth for this person"""
+  dob: String
+  personId: Int
+}
+
+input UpdatePersonInformationInput {
+  """The quote for this person"""
+  quote: String
+
+  """The bio for this person"""
+  bio: String
+
+  """Date of birth for this person"""
+  dob: String
+  personId: Int
+}
+
+input CreateFieldExperienceInput {
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int!
+}
+
+input UpdateFieldExperienceInput {
+  """The duration of the field experience"""
+  duration: String
+
+  """The name of the company"""
+  company: String
+
+  """The performed function"""
+  function: String
+
+  """The description of the field experience"""
+  description: String
+  personId: Int!
+}
+
+input CreateSocialMediaInput {
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+  personId: Int!
+}
+
+input UpdateSocialMediaInput {
+  """The name of the social media platform"""
+  platform: String!
+
+  """The URL of the social media"""
+  url: String!
+  personId: Int!
+}
+
+input CreateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+}
+
+input UpdateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+}
+
+input CreateCourseInput {
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the course"""
+  tags: [String!]
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int = null
+}
+
+input UpdateCourseInput {
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the course"""
+  tags: [String!]
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int = null
+}
+
+input CreateAttachmentInput {
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
+input UpdateAttachmentInput {
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
+input CreateLearningLineInput {
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+}
+
+input UpdateLearningLineInput {
+  """The name of the learning line"""
+  name: String!
+
+  """The color of the learning line"""
+  color: String!
+}
+
+input CreateSpecialisationInput {
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+}
+
+input UpdateSpecialisationInput {
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+}
+
+input CreateGenerationInput {
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
+}
+
+input UpdateGenerationInput {
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
+}
+
+input CreateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+}
+
+input UpdateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+}
+
+input CreateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+}
+
+input UpdateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+}
+
+input UpdateUserInput {
+  """The name of the user"""
+  username: String!
+
+  """The email of the user"""
+  email: String!
+
+  """The password of the user"""
+  password: String!
+
+  """The role of the user"""
+  role: Role!
+}
+
+input LoginUserInput {
+  username: String!
+  password: String!
+}

@@ -1,26 +1,39 @@
 import { Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Repository } from 'typeorm';
 import { CreateSpecialisationInput } from './dto/create-specialisation.input';
 import { UpdateSpecialisationInput } from './dto/update-specialisation.input';
+import { Specialisation } from './entities/specialisation.entity';
 
 @Injectable()
 export class SpecialisationsService {
-  create(createSpecialisationInput: CreateSpecialisationInput) {
-    return 'This action adds a new specialisation';
+  constructor(
+    @InjectRepository(Specialisation)
+    private readonly specialisationRepository: Repository<Specialisation>,
+  ) {}
+
+  create(createSpecialisationInput: CreateSpecialisationInput): Promise<Specialisation> {
+    const newSpecialisation = this.specialisationRepository.create(createSpecialisationInput);
+    return this.specialisationRepository.save(newSpecialisation);
   }
 
-  findAll() {
-    return `This action returns all specialisations`;
+  findAll(): Promise<Specialisation[]> {
+    return this.specialisationRepository.find();
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} specialisation`;
+  findOneById(id: number): Promise<Specialisation> {
+    return this.specialisationRepository.findOneOrFail(id);
   }
 
-  update(id: number, updateSpecialisationInput: UpdateSpecialisationInput) {
-    return `This action updates a #${id} specialisation`;
+  update(id: number, updateSpecialisationInput: UpdateSpecialisationInput): Promise<Specialisation> {
+    return this.specialisationRepository.save({
+      id: id,
+      ...updateSpecialisationInput,
+    })
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} specialisation`;
+  async remove(id: number): Promise<Specialisation> {
+    const specialisation = await this.findOneById(id);
+    return this.specialisationRepository.remove(specialisation);
   }
 }

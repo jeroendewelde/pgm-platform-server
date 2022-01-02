@@ -9,27 +9,35 @@ export class SpecialisationsResolver {
   constructor(private readonly specialisationsService: SpecialisationsService) {}
 
   @Mutation(() => Specialisation)
-  createSpecialisation(@Args('createSpecialisationInput') createSpecialisationInput: CreateSpecialisationInput) {
+  createSpecialisation(@Args('createSpecialisationInput') createSpecialisationInput: CreateSpecialisationInput): Promise<Specialisation> {
     return this.specialisationsService.create(createSpecialisationInput);
   }
 
   @Query(() => [Specialisation], { name: 'specialisations' })
-  findAll() {
+  findAll(): Promise<Specialisation[]> {
     return this.specialisationsService.findAll();
   }
 
   @Query(() => Specialisation, { name: 'specialisation' })
-  findOne(@Args('id', { type: () => Int }) id: number) {
-    return this.specialisationsService.findOne(id);
+  findOne(@Args('id', { type: () => Int }) id: number): Promise<Specialisation> {
+    return this.specialisationsService.findOneById(id);
   }
 
   @Mutation(() => Specialisation)
-  updateSpecialisation(@Args('updateSpecialisationInput') updateSpecialisationInput: UpdateSpecialisationInput) {
-    return this.specialisationsService.update(updateSpecialisationInput.id, updateSpecialisationInput);
+  updateSpecialisation(
+    @Args('id', { type: () => Int }) 
+    id: number,
+    @Args('updateSpecialisationInput') 
+    updateSpecialisationInput: UpdateSpecialisationInput
+  ): Promise<Specialisation> {
+    return this.specialisationsService.update(id, updateSpecialisationInput);
   }
 
   @Mutation(() => Specialisation)
-  removeSpecialisation(@Args('id', { type: () => Int }) id: number) {
+  removeSpecialisation(@Args('id', { type: () => Int }) id: number): Promise<Specialisation> {
+    const toBeDeletedSpecialisation = this.specialisationsService.findOneById(id);
+
+    if(!toBeDeletedSpecialisation) return null
     return this.specialisationsService.remove(id);
   }
 }

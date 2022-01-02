@@ -71,3 +71,26 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
+
+# Environment
+In the root of the project add these 2 .env-files:
+
+## `.env.dev`
+```
+PORT = 3000
+SECRET = 'test'
+HOST = 'localhost'
+USERNAME = 'user'
+PASSWORD = 'Password1'
+DATABASE = 'pgm-platform'
+```
+
+## `.env.prod`
+```
+PORT = 3000
+SECRET = 'test'
+HOST = 'ec2-54-229-47-120.eu-west-1.compute.amazonaws.com'
+USERNAME = 'kydwozyiagqgfv'
+PASSWORD = '9f74a8b28a8f8b842f409966ecc1a25e9a21b42ef775179421e2d9d0fef1b2b4'
+DATABASE = 'dc67kdr02kr2h1'
+```
