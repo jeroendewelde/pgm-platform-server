@@ -11,12 +11,12 @@ export const config = () => ({
       synchronize: true,
       // ssl: true,
       
-        // ssl: {
+        ssl: {
         //   require: true,
-        //   rejectUnauthorized: false
-        // }
+          rejectUnauthorized: false
+        }
       
-      sslMode: 'require',
+      // sslMode: 'require',
   },
   databaseDev: {  
       type: 'postgres',
