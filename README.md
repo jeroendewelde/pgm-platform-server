@@ -78,7 +78,7 @@ $ heroku login
 $ git push heroku main:main
 ```
 To visit the GraphQL Playground:  
-[https://pgm-platform.herokuapp.com/graphql](https://pgm-platform.herokuapp.com/graphql)
+[https://pgm-platform-server.herokuapp.com/graphql](https://pgm-platform-server.herokuapp.com/graphql)
 
 
 ## Test
