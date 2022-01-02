@@ -10,10 +10,10 @@ export const config = () => ({
       autoLoadEntities: true,
       synchronize: true,
       // ssl: true,
-      extra: {
+      // extra: {
         ssl: {
           rejectUnauthorized: false
-        },
+        // },
       }
         
         
