@@ -13,6 +13,7 @@ export class UsersService {
   ) {}
 
   create(createUserInput: CreateUserInput): Promise<User> {
+    console.log('input user....', createUserInput);
     const newUser = this.userRepository.create(createUserInput);
     return this.userRepository.save(newUser);
   }
@@ -26,7 +27,7 @@ export class UsersService {
   }
 
   findOneByUsername(username: string): Promise<User> {
-    return this.userRepository.findOneOrFail({
+    return this.userRepository.findOne({
       where: {
         username: username,
       },

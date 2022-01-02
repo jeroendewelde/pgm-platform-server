@@ -4,9 +4,6 @@ import { Role } from 'src/scalars/role.scalar';
 
 @InputType()
 export class UpdateUserInput extends PartialType(CreateUserInput) {
-  @Field(() => Int, { description: 'The ID of the user' })
-  id: number
-
   @Field(() => String, { description: 'The name of the user' })
   username: string
 

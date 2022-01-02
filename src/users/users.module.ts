@@ -9,12 +9,10 @@ import { JwtStrategy } from 'src/auth/jwt.strategy';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User]),
-    
   ],
   providers: [
     UsersResolver, 
     UsersService, 
-    // JwtStrategy
   ],
   exports: [
     UsersService,

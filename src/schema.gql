@@ -362,6 +362,7 @@ type Mutation {
   updateUser(updateUserInput: UpdateUserInput!, id: Int!): User!
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
+  signup(loginUserInput: LoginUserInput!): User!
 }
 
 input CreatePersonInput {
@@ -669,9 +670,6 @@ input UpdateInternInput {
 }
 
 input UpdateUserInput {
-  """The ID of the user"""
-  id: Int!
-
   """The name of the user"""
   username: String!
 
