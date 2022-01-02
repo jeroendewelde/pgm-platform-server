@@ -10,6 +10,13 @@ export const config = () => ({
       autoLoadEntities: true,
       synchronize: true,
       // ssl: true,
+      
+        // ssl: {
+        //   require: true,
+        //   rejectUnauthorized: false
+        // }
+      
+      sslMode: 'require',
   },
   databaseDev: {  
       type: 'postgres',
