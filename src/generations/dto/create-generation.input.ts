@@ -12,7 +12,7 @@ export class CreateGenerationInput {
   @IsString()
   @MinLength(9)
   @MaxLength(9)
-  @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2020-2021'"})
+  @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2020-2022'"})
   @Field(() => String, { description: 'The years of the generation' })
   years: string
 }

@@ -37,7 +37,7 @@ export class Course {
   @Field(() => Int, { description: 'The ID of the learning line this project belongs to' })
   learningLineId: number
 
-  @Column()
+  @Column({ nullable: true })
   @Field(() => Int, { description: 'The ID of the specialisation this project belongs to', nullable: true })
   specialisationId?: number
 
