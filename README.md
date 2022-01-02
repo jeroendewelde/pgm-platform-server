@@ -22,28 +22,64 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# PGM-platform server
 ## Description
-
+This is the backend for the PGM-platform, build with a
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
 
-## Installation
-
+## Instal dependencies
+To install the dependencies, run the following command:
 ```bash
+$ yarn install
+# or
 $ npm install
 ```
 
-## Running the app
-
-```bash
-# development
-$ npm run start
-
-# watch mode
-$ npm run start:dev
-
-# production mode
-$ npm run start:prod
+## Set up environments
+When using the local database, create a _postgres_-database with the name **pgm-platform**. Replace the username and password with your own (from the .env.dev-file) if needed.  
+Create following 2 files in the root of the project:  
+### `.env.dev`
 ```
+PORT = 3000
+HOST = 'localhost'
+USERNAME = 'user'
+PASSWORD = 'Password1'
+DATABASE = 'pgm-platform'
+NODE_ENV = 'dev'
+```
+### `.env.prod`
+```
+PORT = 3000
+HOST = 'ec2-99-81-177-233.eu-west-1.compute.amazonaws.com'
+USERNAME = 'gntqirtiiipsqx'
+PASSWORD = 'ec51f1ea0bf0b344890cec03d4caec0495340021fd57b04f2ceb90370d98eb79'
+DATABASE = 'd4fqu73v7m0qnj'
+NODE_ENV = 'prod'
+```
+
+
+## Run the application _locally_
+To run the application locally (with heroku-database or local), run the following commmand:
+```bash
+# Run with local database
+$ yarn start:dev
+
+# Run with deployed database
+$ yarn start:prod
+```
+The GraphQL Playground will be running on:  
+[http://localhost:3000/graphql](http://localhost:3000/graphql).
+
+
+## Deployment
+The app is deployed with [Heroku](https://www.heroku.com/). To deploy the app, run the following command (in the main-branch):
+```bash
+$ heroku login
+$ git push heroku main:main
+```
+To visit the GraphQL Playground:  
+[https://pgm-platform.herokuapp.com/graphql](https://pgm-platform.herokuapp.com/graphql)
+
 
 ## Test
 
@@ -71,26 +107,3 @@ Nest is an MIT-licensed open source project. It can grow thanks to the sponsors 
 ## License
 
 Nest is [MIT licensed](LICENSE).
-
-# Environment
-In the root of the project add these 2 .env-files:
-
-## `.env.dev`
-```
-PORT = 3000
-SECRET = 'test'
-HOST = 'localhost'
-USERNAME = 'user'
-PASSWORD = 'Password1'
-DATABASE = 'pgm-platform'
-```
-
-## `.env.prod`
-```
-PORT = 3000
-SECRET = 'test'
-HOST = 'ec2-54-229-47-120.eu-west-1.compute.amazonaws.com'
-USERNAME = 'kydwozyiagqgfv'
-PASSWORD = '9f74a8b28a8f8b842f409966ecc1a25e9a21b42ef775179421e2d9d0fef1b2b4'
-DATABASE = 'dc67kdr02kr2h1'
-```
