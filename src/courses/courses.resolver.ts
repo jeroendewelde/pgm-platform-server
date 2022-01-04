@@ -7,6 +7,7 @@ import { CoursesService } from './courses.service';
 import { Project } from 'src/projects/entities/project.entity';
 import { Person } from 'src/persons/entities/person.entity';
 import { Attachment } from 'src/attachments/entities/attachment.entity';
+import { LearningLine } from 'src/learning-lines/entities/learning-line.entity';
 
 @Resolver(() => Course)
 export class CoursesResolver {
@@ -52,6 +53,14 @@ export class CoursesResolver {
     @Parent() course: Course,
   ): Promise<Attachment[]> {
     return this.coursesService.getAttachments(course.id);
+  }
+
+  @ResolveField(() => LearningLine)
+  learningLine(
+    @Parent() 
+    course: Course
+  ): Promise<LearningLine> {
+    return this.coursesService.getLearningLine(course.id);
   }
 
   @Query(() => [Course], { name: 'coursesByLearningLineId' })

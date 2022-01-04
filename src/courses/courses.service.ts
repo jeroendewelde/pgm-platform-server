@@ -12,6 +12,7 @@ import { PersonsService } from 'src/persons/persons.service';
 import { Person } from 'src/persons/entities/person.entity';
 import { AttachmentsService } from 'src/attachments/attachments.service';
 import { Attachment } from 'src/attachments/entities/attachment.entity';
+import { LearningLine } from 'src/learning-lines/entities/learning-line.entity';
 
 @Injectable()
 export class CoursesService {
@@ -85,6 +86,15 @@ export class CoursesService {
   //     }
   //   })
   // }
+
+  async getLearningLine(courseId: number): Promise<LearningLine> {
+    const course =  await this.courseRepository.findOneOrFail(courseId, {
+      relations: ['learningLine']
+    });
+
+    if(course.learningLine) return course.learningLine;
+    return null;
+  }
 
 
   getProjects(courseId: number): Promise<Project[]> {
