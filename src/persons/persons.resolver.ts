@@ -28,6 +28,16 @@ export class PersonsResolver {
     return this.personsService.findOneById(id);
   }
 
+  @Query(() => [Person], { name: 'students' })
+  findAllStudents(): Promise<Person[]> {
+    return this.personsService.findAllStudents();
+  }
+
+  @Query(() => [Person], { name: 'teachers' })
+  findAllTeachers(): Promise<Person[]> {
+    return this.personsService.findAllTeachers();
+  }
+  
   @ResolveField(returns => PersonInformation)
   personInformation(@Parent() person: Person): Promise<PersonInformation> {
     return this.personsService.getPersonInformation(person.id);

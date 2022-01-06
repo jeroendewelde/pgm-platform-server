@@ -291,6 +291,8 @@ type LoginResponse {
 type Query {
   persons: [Person!]!
   person(id: Int!): Person!
+  students: [Person!]!
+  teachers: [Person!]!
   personInformations: [PersonInformation!]!
   personInformation(id: Int!): PersonInformation!
   fieldExperiences: [FieldExperience!]!

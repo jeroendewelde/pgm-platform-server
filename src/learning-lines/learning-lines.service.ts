@@ -22,7 +22,7 @@ export class LearningLinesService {
   }
 
   findOneById(id: number): Promise<LearningLine> {
-    return this.learningLineRepository.findOneOrFail(id);
+    return this.learningLineRepository.findOne(id);
   }
 
   update(id: number, updateLearningLineInput: UpdateLearningLineInput): Promise<LearningLine> {
@@ -33,7 +33,7 @@ export class LearningLinesService {
   }
 
   async remove(id: number): Promise<LearningLine> {
-    const learningLine = await this.findOneById(id);
-    return this.learningLineRepository.remove(learningLine);
+    const learningLine = await this.learningLineRepository.findOneOrFail(id);
+    return await this.learningLineRepository.remove(learningLine);
   }
 }

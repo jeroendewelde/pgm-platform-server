@@ -27,6 +27,22 @@ export class PersonsService {
     return this.personRepository.find();
   }
 
+  findAllStudents(): Promise<Person[]> {
+    return this.personRepository.find({
+      where: {
+        type: 'STUDENT'
+      }
+    });
+  }
+
+  findAllTeachers(): Promise<Person[]> {
+    return this.personRepository.find({
+      where: {
+        type: 'TEACHER'
+      }
+    });
+  }
+
   findOneById(id: number): Promise<Person> {
     return this.personRepository.findOneOrFail(id);
   }

@@ -13,7 +13,7 @@ export class UpdateSpecialisationInput extends PartialType(CreateSpecialisationI
   @IsString()
   @MinLength(9)
   @MaxLength(9)
-  @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2020-2021'"})
+  @Matches(/20[0-9]{2}-20[0-9]{2}/, {message: "The academic year must be in format '2019-2021'"})
   @Field(() => String, { description: 'The academic year of this specialisation' })
   academicYear: string
 }
