@@ -50,10 +50,10 @@ NODE_ENV = 'dev'
 ### `.env.prod`
 ```
 PORT = 3000
-HOST = 'ec2-99-81-177-233.eu-west-1.compute.amazonaws.com'
-USERNAME = 'gntqirtiiipsqx'
-PASSWORD = 'ec51f1ea0bf0b344890cec03d4caec0495340021fd57b04f2ceb90370d98eb79'
-DATABASE = 'd4fqu73v7m0qnj'
+HOST = 'ec2-18-203-64-130.eu-west-1.compute.amazonaws.com'
+USERNAME = 'gvkdhlaabvvrnl'
+PASSWORD = '2570f8b153cb8719aa090228901d2491b932b513c5233c262ae84c84bb4e79f9'
+DATABASE = 'd6d47bpb53hdm6'
 NODE_ENV = 'prod'
 ```
 
