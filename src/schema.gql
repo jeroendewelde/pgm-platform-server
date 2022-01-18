@@ -114,16 +114,27 @@ type SocialMedia {
   id: Int!
 
   """The name of the social media platform"""
-  platform: String!
+  platform: SocialMediaPlatform
 
   """The URL of the social media"""
-  url: String!
+  url: String
 
   """The ID of the person this social media belongs to"""
   personId: Int!
 
   """The person this social media belongs to"""
   person: PersonInformation!
+}
+
+"""The name of the social media platform"""
+enum SocialMediaPlatform {
+  FACEBOOK
+  TWITTER
+  INSTAGRAM
+  LINKEDIN
+  YOUTUBE
+  GITHUB
+  OTHER
 }
 
 type FieldExperience {
@@ -141,7 +152,7 @@ type FieldExperience {
 
   """The description of the field experience"""
   description: String
-  personId: Int
+  personId: Int!
 
   """The person this field experience belongs to"""
   person: PersonInformation!
@@ -156,13 +167,13 @@ type PersonInformation {
 
   """The bio for this person"""
   bio: String
-  dob: DateTime!
+  dob: DateTime
 
   """The ID of the person this information belongs to"""
   personId: Int!
 
   """The person this person information belongs to"""
-  person: Person
+  person: Person!
 
   """List of social media for this person"""
   socialMedias: [SocialMedia!]
@@ -295,8 +306,10 @@ type Query {
   teachers: [Person!]!
   personInformations: [PersonInformation!]!
   personInformation(id: Int!): PersonInformation!
+  personInformationByPersonId(id: Int!): PersonInformation!
   fieldExperiences: [FieldExperience!]!
   fieldExperience(id: Int!): FieldExperience!
+  fieldExperiencesByPersonId(id: Int!): [FieldExperience!]!
   socialMedias: [SocialMedia!]!
   socialMedia(id: Int!): SocialMedia!
   projects: [Project!]!
@@ -391,9 +404,12 @@ input UpdatePersonInput {
 
   """The generation this student belongs to"""
   generationId: Int
+
+  """The person Information"""
+  personInformation: UpdatePersonInformationInput
 }
 
-input CreatePersonInformationInput {
+input UpdatePersonInformationInput {
   """The quote for this person"""
   quote: String
 
@@ -402,10 +418,10 @@ input CreatePersonInformationInput {
 
   """Date of birth for this person"""
   dob: String
-  personId: Int
+  personId: Int!
 }
 
-input UpdatePersonInformationInput {
+input CreatePersonInformationInput {
   """The quote for this person"""
   quote: String
 
@@ -449,19 +465,19 @@ input UpdateFieldExperienceInput {
 
 input CreateSocialMediaInput {
   """The name of the social media platform"""
-  platform: String!
+  platform: SocialMediaPlatform
 
   """The URL of the social media"""
-  url: String!
+  url: String
   personId: Int!
 }
 
 input UpdateSocialMediaInput {
   """The name of the social media platform"""
-  platform: String!
+  platform: SocialMediaPlatform
 
   """The URL of the social media"""
-  url: String!
+  url: String
   personId: Int!
 }
 
@@ -526,29 +542,35 @@ input CreateCourseInput {
 
   """The ID of the specialisation this project belongs to"""
   specialisationId: Int = null
+
+  """List of teacherIds for the course"""
+  teacherIds: [Float!]
 }
 
 input UpdateCourseInput {
   """The name of the course"""
-  name: String!
+  name: String
 
   """The description of the course"""
-  description: String!
+  description: String
 
   """The number of the term"""
-  term: Int!
+  term: Int
 
   """The academic year of the project"""
-  academicYear: String!
+  academicYear: String
 
   """List of tags for the course"""
   tags: [String!]
 
   """The ID of the learning line this project belongs to"""
-  learningLineId: Int!
+  learningLineId: Int
 
   """The ID of the specialisation this project belongs to"""
   specialisationId: Int = null
+
+  """List of teacherIds for the course"""
+  teacherIds: [Float!]
 }
 
 input CreateAttachmentInput {

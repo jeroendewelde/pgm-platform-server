@@ -1,18 +1,18 @@
-import { Repository } from 'typeorm';
+import { Repository } from "typeorm";
 
-import { forwardRef, Inject, Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 
-import { Course } from './entities/course.entity';
-import { CreateCourseInput } from './dto/create-course.input';
-import { UpdateCourseInput } from './dto/update-course.input';
-import { Project } from 'src/projects/entities/project.entity';
-import { ProjectsService } from 'src/projects/projects.service';
-import { PersonsService } from 'src/persons/persons.service';
-import { Person } from 'src/persons/entities/person.entity';
-import { AttachmentsService } from 'src/attachments/attachments.service';
-import { Attachment } from 'src/attachments/entities/attachment.entity';
-import { LearningLine } from 'src/learning-lines/entities/learning-line.entity';
+import { Course } from "./entities/course.entity";
+import { CreateCourseInput } from "./dto/create-course.input";
+import { UpdateCourseInput } from "./dto/update-course.input";
+import { Project } from "src/projects/entities/project.entity";
+import { ProjectsService } from "src/projects/projects.service";
+import { PersonsService } from "src/persons/persons.service";
+import { Person } from "src/persons/entities/person.entity";
+import { AttachmentsService } from "src/attachments/attachments.service";
+import { Attachment } from "src/attachments/entities/attachment.entity";
+import { LearningLine } from "src/learning-lines/entities/learning-line.entity";
 
 @Injectable()
 export class CoursesService {
@@ -22,35 +22,54 @@ export class CoursesService {
     @Inject(forwardRef(() => ProjectsService))
     private readonly projectService: ProjectsService,
     private personsService: PersonsService,
-    private attachmentsService: AttachmentsService,
+    private attachmentsService: AttachmentsService
   ) {}
 
-  create(createCourseInput: CreateCourseInput): Promise<Course> {
-    const newCourse = this.courseRepository.create(createCourseInput);
+  async create(createCourseInput: CreateCourseInput): Promise<Course> {
+    const { teacherIds, ...courseObject } = createCourseInput;
+    const newCourse = await this.courseRepository.create(courseObject);
+
+    if (teacherIds.length > 0) {
+      await this.addTeachersToCourse(newCourse.id, teacherIds);
+    }
+
     return this.courseRepository.save(newCourse);
   }
 
-  async addAttachmentsToCourse(courseId: number, attachments: number[]): Promise<Course> {
-    const course = await this.courseRepository.findOneOrFail(courseId, { relations: ['attachments'] });
+  async addAttachmentsToCourse(
+    courseId: number,
+    attachments: number[]
+  ): Promise<Course> {
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ["attachments"],
+    });
 
-    attachments.forEach(async(attachment) => {
-      const newAttachment = await this.attachmentsService.findOneById(attachment);
+    attachments.forEach(async (attachment) => {
+      const newAttachment = await this.attachmentsService.findOneById(
+        attachment
+      );
 
-      if( !course.attachments.includes(newAttachment) ) course.attachments.push(newAttachment);
-    })
+      if (!course.attachments.includes(newAttachment))
+        course.attachments.push(newAttachment);
+    });
     return this.courseRepository.save(course);
   }
 
-  async addTeachersToCourse(courseId: number, teacherIds: number[]): Promise<Course> {
-    const course = await this.courseRepository.findOneOrFail(courseId, { relations: ['teachers'] });
+  async addTeachersToCourse(
+    courseId: number,
+    teacherIds: number[]
+  ): Promise<Course> {
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ["teachers"],
+    });
 
-    teacherIds.forEach(async(teacherId) => {
+    teacherIds.forEach(async (teacherId) => {
       const teacher = await this.personsService.findOneById(teacherId);
-    
-      if(teacher.type === 'TEACHER') {
-          if( !course.teachers.includes(teacher) ) course.teachers.push(teacher);
-        }
-    });    
+
+      if (teacher.type === "TEACHER") {
+        if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
+      }
+    });
     return this.courseRepository.save(course);
   }
 
@@ -61,21 +80,21 @@ export class CoursesService {
   findOneById(id: number): Promise<Course> {
     return this.courseRepository.findOneOrFail(id);
   }
-  
+
   findByLearningLineId(learningLineId: number): Promise<Course[]> {
     return this.courseRepository.find({
       where: {
-        learningLineId : learningLineId
-      }
-    })
+        learningLineId: learningLineId,
+      },
+    });
   }
 
   async getAttachments(courseId: number): Promise<Attachment[]> {
     const course = await this.courseRepository.findOneOrFail(courseId, {
-      relations: ['attachments']
+      relations: ["attachments"],
     });
-      
-    if(course.attachments) return course.attachments;
+
+    if (course.attachments) return course.attachments;
     return [];
   }
 
@@ -88,14 +107,13 @@ export class CoursesService {
   // }
 
   async getLearningLine(courseId: number): Promise<LearningLine> {
-    const course =  await this.courseRepository.findOneOrFail(courseId, {
-      relations: ['learningLine']
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ["learningLine"],
     });
 
-    if(course.learningLine) return course.learningLine;
+    if (course.learningLine) return course.learningLine;
     return null;
   }
-
 
   getProjects(courseId: number): Promise<Project[]> {
     return this.projectService.findByCourseId(courseId);
@@ -103,19 +121,18 @@ export class CoursesService {
 
   async getTeachers(courseId: number): Promise<Person[]> {
     const course = await this.courseRepository.findOneOrFail(courseId, {
-      relations: ['teachers']
+      relations: ["teachers"],
     });
-      
-    if(course.teachers) return course.teachers;
+
+    if (course.teachers) return course.teachers;
     return [];
   }
-  
 
   update(id: number, updateCourseInput: UpdateCourseInput): Promise<Course> {
     return this.courseRepository.save({
       id: id,
       ...updateCourseInput,
-    })
+    });
   }
 
   async remove(id: number): Promise<Course> {

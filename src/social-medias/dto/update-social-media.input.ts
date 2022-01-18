@@ -1,21 +1,29 @@
-import { CreateSocialMediaInput } from './create-social-media.input';
-import { InputType, Field, Int, PartialType } from '@nestjs/graphql';
-import { IsNotEmpty, IsString, IsUrl } from 'class-validator';
+import { CreateSocialMediaInput } from "./create-social-media.input";
+import { InputType, Field, Int, PartialType } from "@nestjs/graphql";
+import { IsNotEmpty, IsString, IsUrl } from "class-validator";
 
-import { SocialMediaPlatform } from 'src/scalars/social-media-platform.scalar';
+import { SocialMediaPlatform } from "src/scalars/social-media-platform.scalar";
 
 @InputType()
-export class UpdateSocialMediaInput extends PartialType(CreateSocialMediaInput) {
+export class UpdateSocialMediaInput extends PartialType(
+  CreateSocialMediaInput
+) {
   @IsNotEmpty()
   @IsString()
-  @Field(() => String, { description: 'The name of the social media platform' })
-  platform: SocialMediaPlatform
+  @Field(() => SocialMediaPlatform, {
+    description: "The name of the social media platform",
+    nullable: true,
+  })
+  platform?: SocialMediaPlatform;
 
   @IsNotEmpty()
   @IsUrl()
-  @Field(() => String, { description: 'The URL of the social media' })
-  url: string
+  @Field(() => String, {
+    description: "The URL of the social media",
+    nullable: true,
+  })
+  url?: string;
 
-  @Field(type => Int)
+  @Field((type) => Int)
   personId: number;
 }
