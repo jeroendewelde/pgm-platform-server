@@ -1,6 +1,6 @@
 import { Repository } from "typeorm";
 
-import { Injectable } from "@nestjs/common";
+import { forwardRef, Inject, Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 
 import { Person } from "./entities/person.entity";
@@ -10,18 +10,56 @@ import { CreatePersonInput } from "./dto/create-person.input";
 import { UpdatePersonInput } from "./dto/update-person.input";
 import { PersonInformationsService } from "src/person-informations/person-informations.service";
 import { CreatePersonInformationInput } from "src/person-informations/dto/create-person-information.input";
+import { CoursesService } from "src/courses/courses.service";
 
 @Injectable()
 export class PersonsService {
   constructor(
     @InjectRepository(Person)
     private personRepository: Repository<Person>,
-    private personInformationService: PersonInformationsService
+    private personInformationService: PersonInformationsService,
+    @Inject(forwardRef(() => CoursesService))
+    private readonly coursesService: CoursesService
   ) {}
 
-  create(createPersonInput: CreatePersonInput): Promise<Person> {
-    const newPerson = this.personRepository.create(createPersonInput);
-    return this.personRepository.save(newPerson);
+  async create(createPersonInput: CreatePersonInput): Promise<Person> {
+    const { courseIds, personInformation, ...personObject } = createPersonInput;
+
+    // const newPerson = await this.personRepository.create(personObject);
+    const newPerson = await this.personRepository.save(personObject);
+
+    // Add person Information
+    if (personInformation) {
+      console.log("......INFO....", personInformation);
+      personInformation.personId = newPerson.id;
+      await this.personInformationService.create(personInformation);
+    }
+
+    if (courseIds.length > 0) {
+      console.log(".... new ID", newPerson.id);
+      await this.addCoursesToPerson(newPerson.id, courseIds);
+    }
+
+    return newPerson;
+  }
+
+  async addCoursesToPerson(
+    personId: number,
+    courseIds: number[]
+  ): Promise<Person> {
+    const person = await this.personRepository.findOneOrFail(personId, {
+      relations: ["courses"],
+    });
+
+    console.log("new person....", person);
+
+    courseIds.forEach(async (courseId) => {
+      const course = await this.coursesService.findOneById(courseId);
+
+      if (!person.courses.includes(course)) person.courses.push(course);
+    });
+
+    return this.personRepository.save(person);
   }
 
   findAll(): Promise<Person[]> {
@@ -55,7 +93,7 @@ export class PersonsService {
       await this.personInformationService.findByPersonId(personId);
     if (personInformation) {
       return personInformation;
-    } else return {};
+    } else return [];
     // return this.personInformationService.findByPersonId(personId);
   }
 

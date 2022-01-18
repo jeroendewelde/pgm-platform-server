@@ -6,7 +6,8 @@ import { PersonInformation } from "src/person-informations/entities/person-infor
 import { UpdatePersonInformationInput } from "src/person-informations/dto/update-person-information.input";
 
 @InputType()
-export class UpdatePersonInput extends PartialType(CreatePersonInput) {
+// export class UpdatePersonInput extends PartialType(CreatePersonInput) {
+export class UpdatePersonInput {
   @IsNotEmpty()
   @IsString()
   @Field(() => String, { description: "The first name of the person" })

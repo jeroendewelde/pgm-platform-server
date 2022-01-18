@@ -5,9 +5,10 @@ import { IsNotEmpty, IsString, IsUrl } from "class-validator";
 import { SocialMediaPlatform } from "src/scalars/social-media-platform.scalar";
 
 @InputType()
-export class UpdateSocialMediaInput extends PartialType(
-  CreateSocialMediaInput
-) {
+// export class UpdateSocialMediaInput extends PartialType(
+//   CreateSocialMediaInput
+// ) {
+export class UpdateSocialMediaInput {
   @IsNotEmpty()
   @IsString()
   @Field(() => SocialMediaPlatform, {

@@ -3,9 +3,10 @@ import { InputType, Field, Int, PartialType } from "@nestjs/graphql";
 import { IsNotEmpty, IsString } from "class-validator";
 
 @InputType()
-export class UpdatePersonInformationInput extends PartialType(
-  CreatePersonInformationInput
-) {
+// export class UpdatePersonInformationInput extends PartialType(
+//   CreatePersonInformationInput
+// ) {
+export class UpdatePersonInformationInput {
   @IsNotEmpty()
   @IsString()
   @Field(() => String, {

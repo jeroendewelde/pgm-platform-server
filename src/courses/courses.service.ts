@@ -21,7 +21,8 @@ export class CoursesService {
     private courseRepository: Repository<Course>,
     @Inject(forwardRef(() => ProjectsService))
     private readonly projectService: ProjectsService,
-    private personsService: PersonsService,
+    @Inject(forwardRef(() => PersonsService))
+    private readonly personsService: PersonsService,
     private attachmentsService: AttachmentsService
   ) {}
 
@@ -29,11 +30,14 @@ export class CoursesService {
     const { teacherIds, ...courseObject } = createCourseInput;
     const newCourse = await this.courseRepository.create(courseObject);
 
+    const newnewCourse = await this.courseRepository.save(newCourse);
+    console.log("....new course ID....", newnewCourse.id);
+
     if (teacherIds.length > 0) {
-      await this.addTeachersToCourse(newCourse.id, teacherIds);
+      await this.addTeachersToCourse(newnewCourse.id, teacherIds);
     }
 
-    return this.courseRepository.save(newCourse);
+    return newnewCourse;
   }
 
   async addAttachmentsToCourse(
@@ -128,11 +132,41 @@ export class CoursesService {
     return [];
   }
 
-  update(id: number, updateCourseInput: UpdateCourseInput): Promise<Course> {
+  async update(
+    id: number,
+    updateCourseInput: UpdateCourseInput
+  ): Promise<Course> {
+    const { teacherIds, ...courseObject } = updateCourseInput;
+
+    if (teacherIds.length > 0) {
+      await this.updateTeachersInCourse(id, teacherIds);
+    }
+
     return this.courseRepository.save({
       id: id,
-      ...updateCourseInput,
+      ...courseObject,
     });
+  }
+
+  async updateTeachersInCourse(
+    courseId: number,
+    teacherIds: number[]
+  ): Promise<Course> {
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ["teachers"],
+    });
+
+    course.teachers = [];
+
+    teacherIds.forEach(async (teacherId) => {
+      const teacher = await this.personsService.findOneById(teacherId);
+
+      if (teacher.type === "TEACHER") {
+        if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
+      }
+    });
+
+    return this.courseRepository.save(course);
   }
 
   async remove(id: number): Promise<Course> {

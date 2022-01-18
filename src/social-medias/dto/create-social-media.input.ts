@@ -21,6 +21,6 @@ export class CreateSocialMediaInput {
   })
   url?: string;
 
-  @Field((type) => Int)
-  personId: number;
+  @Field((type) => Int, { nullable: true })
+  personId?: number;
 }

@@ -20,13 +20,30 @@ export class PersonInformationsService {
     private socialMediaService: SocialMediasService
   ) {}
 
-  create(
+  async create(
     createPersonInformationInput: CreatePersonInformationInput
   ): Promise<PersonInformation> {
-    const newPersonInformation = this.personInformationRepository.create(
-      createPersonInformationInput
+    let { fieldExperiences, socialMedias, ...personInformation } =
+      createPersonInformationInput;
+
+    const newPersonInformation = await this.personInformationRepository.save(
+      personInformation
     );
-    return this.personInformationRepository.save(newPersonInformation);
+
+    if (fieldExperiences.length > 0) {
+      fieldExperiences.map((fieldExperience) => {
+        fieldExperience.personId = newPersonInformation.id;
+        this.fieldExperienceService.create(fieldExperience);
+      });
+    }
+
+    if (socialMedias.length > 0) {
+      socialMedias.map((socialMedia) => {
+        socialMedia.personId = newPersonInformation.id;
+        this.socialMediaService.create(socialMedia);
+      });
+    }
+    return newPersonInformation;
   }
 
   findAll(): Promise<PersonInformation[]> {
