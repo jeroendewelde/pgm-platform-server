@@ -11,6 +11,7 @@ import { UpdatePersonInput } from "./dto/update-person.input";
 import { PersonInformationsService } from "src/person-informations/person-informations.service";
 import { CreatePersonInformationInput } from "src/person-informations/dto/create-person-information.input";
 import { CoursesService } from "src/courses/courses.service";
+import { Course } from "src/courses/entities/course.entity";
 
 @Injectable()
 export class PersonsService {
@@ -25,18 +26,21 @@ export class PersonsService {
   async create(createPersonInput: CreatePersonInput): Promise<Person> {
     const { courseIds, personInformation, ...personObject } = createPersonInput;
 
-    // const newPerson = await this.personRepository.create(personObject);
     const newPerson = await this.personRepository.save(personObject);
 
     // Add person Information
     if (personInformation) {
-      console.log("......INFO....", personInformation);
-      personInformation.personId = newPerson.id;
-      await this.personInformationService.create(personInformation);
+      if (
+        personInformation.quote !== "" ||
+        personInformation.bio !== "" ||
+        personInformation.dob !== null
+      ) {
+        personInformation.personId = newPerson.id;
+        await this.personInformationService.create(personInformation);
+      }
     }
 
     if (courseIds.length > 0) {
-      console.log(".... new ID", newPerson.id);
       await this.addCoursesToPerson(newPerson.id, courseIds);
     }
 
@@ -97,25 +101,59 @@ export class PersonsService {
     // return this.personInformationService.findByPersonId(personId);
   }
 
+  async getCourses(personId: number): Promise<Course[]> {
+    const person = await this.personRepository.findOneOrFail(personId, {
+      relations: ["courses"],
+    });
+
+    if (person.courses) return person.courses;
+    return [];
+  }
+
   async update(
     id: number,
     updatePersonInput: UpdatePersonInput
   ): Promise<Person> {
-    const { personInformation, ...rest } = updatePersonInput;
+    const { courseIds, personInformation, ...personObject } = updatePersonInput;
+    console.log("id...", id);
 
+    const updatedPerson = await this.personRepository.save({
+      id: id,
+      ...personObject,
+    });
+
+    // Update person Information
     if (personInformation) {
+      console.log("personInformation...", personInformation);
+      //TODO: check if personInformation exists
       const personInfoFromDb =
         await this.personInformationService.findByPersonId(id);
-      this.personInformationService.update(
-        personInfoFromDb.id,
-        personInformation
-      );
+      if (personInfoFromDb) {
+        console.log("gevonden!");
+        this.personInformationService.update(
+          personInfoFromDb.id,
+          personInformation
+        );
+      } else {
+        console.log("niet gevonden!");
+        if (
+          personInformation.quote !== "" ||
+          personInformation.bio !== "" ||
+          personInformation.dob !== null
+        ) {
+          personInformation.personId = updatedPerson.id;
+          await this.personInformationService.create(personInformation);
+        }
+      }
+    } else {
+      console.log("no personInformation...");
     }
 
-    return this.personRepository.save({
-      id: id,
-      ...rest,
-    });
+    if (courseIds.length > 0) {
+      await this.addCoursesToPerson(id, courseIds);
+    }
+
+    return updatedPerson;
   }
 
   async remove(id: number) {

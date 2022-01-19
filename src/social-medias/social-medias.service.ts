@@ -1,21 +1,23 @@
-import { Repository } from 'typeorm';
+import { Repository } from "typeorm";
 
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
 
-import { CreateSocialMediaInput } from './dto/create-social-media.input';
-import { UpdateSocialMediaInput } from './dto/update-social-media.input';
-import { SocialMedia } from './entities/social-media.entity';
+import { CreateSocialMediaInput } from "./dto/create-social-media.input";
+import { UpdateSocialMediaInput } from "./dto/update-social-media.input";
+import { SocialMedia } from "./entities/social-media.entity";
 
 @Injectable()
 export class SocialMediasService {
   constructor(
     @InjectRepository(SocialMedia)
-    private socialMediaRepository: Repository<SocialMedia>,
+    private socialMediaRepository: Repository<SocialMedia>
   ) {}
 
   create(createSocialMediaInput: CreateSocialMediaInput): Promise<SocialMedia> {
-    const newSocialMedia = this.socialMediaRepository.create(createSocialMediaInput);
+    const newSocialMedia = this.socialMediaRepository.create(
+      createSocialMediaInput
+    );
     return this.socialMediaRepository.save(newSocialMedia);
   }
 
@@ -23,27 +25,41 @@ export class SocialMediasService {
     return this.socialMediaRepository.find();
   }
 
-  findOneById(id: number): Promise<SocialMedia> {
+  findOneById(id: string): Promise<SocialMedia> {
     return this.socialMediaRepository.findOneOrFail(id);
   }
 
-  findByPersonInformationId(personInformationId: number): Promise<SocialMedia[]> {
+  findByPersonInformationId(
+    personInformationId: number
+  ): Promise<SocialMedia[]> {
     return this.socialMediaRepository.find({
       where: {
         personId: personInformationId,
-      }
+      },
     });
   }
 
-  update(id: number, updateSocialMediaInput: UpdateSocialMediaInput) {
+  update(id: string, updateSocialMediaInput: UpdateSocialMediaInput) {
     return this.socialMediaRepository.save({
       id: id,
       ...updateSocialMediaInput,
-    })
+    });
   }
 
-  async remove(id: number) {
+  async remove(id: string) {
     const socialMedia = await this.findOneById(id);
-    return this.socialMediaRepository.remove(socialMedia);
+    const socialMediaErased = await this.socialMediaRepository.remove(
+      socialMedia
+    );
+    // await this.socialMediaRepository.save(socialMediaErased);
+    console.log("erased....", socialMediaErased);
+    return socialMediaErased;
+  }
+
+  async removeList(socialMedias: SocialMedia[]) {
+    const socialMediaErased = await this.socialMediaRepository.remove(
+      socialMedias
+    );
+    return socialMediaErased;
   }
 }

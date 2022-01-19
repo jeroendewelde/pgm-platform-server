@@ -14,6 +14,7 @@ import { PersonInformation } from "src/person-informations/entities/person-infor
 import { CreatePersonInput } from "./dto/create-person.input";
 import { UpdatePersonInput } from "./dto/update-person.input";
 import { PersonsService } from "./persons.service";
+import { Course } from "src/courses/entities/course.entity";
 
 @Resolver(() => Person)
 export class PersonsResolver {
@@ -49,6 +50,11 @@ export class PersonsResolver {
   @ResolveField((returns) => PersonInformation)
   personInformation(@Parent() person: Person): Promise<PersonInformation | {}> {
     return this.personsService.getPersonInformation(person.id);
+  }
+
+  @ResolveField((returns) => [Course])
+  courses(@Parent() person: Person): Promise<Course[]> {
+    return this.personsService.getCourses(person.id);
   }
 
   @Mutation(() => Person)

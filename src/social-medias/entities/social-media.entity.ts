@@ -8,9 +8,11 @@ import { Person } from "src/persons/entities/person.entity";
 @Entity()
 @ObjectType()
 export class SocialMedia {
-  @PrimaryGeneratedColumn()
-  @Field(() => Int, { description: "The ID of this social media information" })
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  @Field(() => String, {
+    description: "The ID of this social media information",
+  })
+  id: string;
 
   @Column({ nullable: true })
   @Field(() => SocialMediaPlatform, {

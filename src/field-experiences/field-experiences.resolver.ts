@@ -26,7 +26,7 @@ export class FieldExperiencesResolver {
 
   @Query(() => FieldExperience, { name: "fieldExperience" })
   findOne(
-    @Args("id", { type: () => Int }) id: number
+    @Args("id", { type: () => String }) id: string
   ): Promise<FieldExperience> {
     return this.fieldExperiencesService.findOneById(id);
   }
@@ -40,8 +40,8 @@ export class FieldExperiencesResolver {
 
   @Mutation(() => FieldExperience)
   updateFieldExperience(
-    @Args("id", { type: () => Int })
-    id: number,
+    @Args("id", { type: () => String })
+    id: string,
     @Args("updateFieldExperienceInput")
     updateFieldExperienceInput: UpdateFieldExperienceInput
   ): Promise<FieldExperience> {
@@ -50,7 +50,7 @@ export class FieldExperiencesResolver {
 
   @Mutation(() => FieldExperience)
   removeFieldExperience(
-    @Args("id", { type: () => Int }) id: number
+    @Args("id", { type: () => String }) id: string
   ): Promise<FieldExperience> {
     const toBeDeletedFieldExperience =
       this.fieldExperiencesService.findOneById(id);

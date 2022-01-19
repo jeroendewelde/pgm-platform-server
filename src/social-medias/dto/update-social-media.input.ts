@@ -9,6 +9,12 @@ import { SocialMediaPlatform } from "src/scalars/social-media-platform.scalar";
 //   CreateSocialMediaInput
 // ) {
 export class UpdateSocialMediaInput {
+  @Field(() => String, {
+    description: "The ID of this social media information",
+    nullable: true,
+  })
+  id?: string;
+
   @IsNotEmpty()
   @IsString()
   @Field(() => SocialMediaPlatform, {
@@ -25,6 +31,6 @@ export class UpdateSocialMediaInput {
   })
   url?: string;
 
-  @Field((type) => Int)
-  personId: number;
+  @Field((type) => Int, { nullable: true })
+  personId?: number;
 }

@@ -29,6 +29,12 @@ export class UpdatePersonInput {
   })
   personInformation?: UpdatePersonInformationInput;
 
+  @Field(() => [Number], {
+    description: "List of courses for the teacher",
+    nullable: true,
+  })
+  courseIds?: number[];
+
   // Relations
   @Field(() => Int, {
     description: "The generation this student belongs to",

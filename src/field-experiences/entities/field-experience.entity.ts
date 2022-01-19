@@ -5,9 +5,9 @@ import { Column, Entity, ManyToOne, PrimaryGeneratedColumn } from "typeorm";
 @Entity()
 @ObjectType()
 export class FieldExperience {
-  @PrimaryGeneratedColumn()
-  @Field(() => Int, { description: "The ID of the field experience" })
-  id: number;
+  @PrimaryGeneratedColumn("uuid")
+  @Field(() => String, { description: "The ID of the field experience" })
+  id: string;
 
   @Column({ nullable: true })
   @Field(() => String, {

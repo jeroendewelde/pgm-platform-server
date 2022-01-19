@@ -111,7 +111,7 @@ type Course {
 
 type SocialMedia {
   """The ID of this social media information"""
-  id: Int!
+  id: String!
 
   """The name of the social media platform"""
   platform: SocialMediaPlatform
@@ -139,7 +139,7 @@ enum SocialMediaPlatform {
 
 type FieldExperience {
   """The ID of the field experience"""
-  id: Int!
+  id: String!
 
   """The duration of the field experience"""
   duration: String
@@ -261,6 +261,7 @@ type Person {
 
   """The generation this student belongs to"""
   generation: Generation
+  courses: [Course!]!
 }
 
 """The type of the person"""
@@ -308,10 +309,10 @@ type Query {
   personInformation(id: Int!): PersonInformation!
   personInformationByPersonId(id: Int!): PersonInformation!
   fieldExperiences: [FieldExperience!]!
-  fieldExperience(id: Int!): FieldExperience!
+  fieldExperience(id: String!): FieldExperience!
   fieldExperiencesByPersonId(id: Int!): [FieldExperience!]!
   socialMedias: [SocialMedia!]!
-  socialMedia(id: Int!): SocialMedia!
+  socialMedia(id: String!): SocialMedia!
   courses: [Course!]!
   course(id: Int!): Course!
   coursesByLearningLineId(learningLineId: Int!): [Course!]!
@@ -341,11 +342,11 @@ type Mutation {
   updatePersonInformation(updatePersonInformationInput: UpdatePersonInformationInput!, id: Int!): PersonInformation!
   removePersonInformation(id: Int!): PersonInformation!
   createFieldExperience(createFieldExperienceInput: CreateFieldExperienceInput!): FieldExperience!
-  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: Int!): FieldExperience!
-  removeFieldExperience(id: Int!): FieldExperience!
+  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: String!): FieldExperience!
+  removeFieldExperience(id: String!): FieldExperience!
   createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
-  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
-  removeSocialMedia(id: Int!): SocialMedia!
+  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: String!): SocialMedia!
+  removeSocialMedia(id: String!): SocialMedia!
   createCourse(createCourseInput: CreateCourseInput!): Course!
   addAttachmentsToCourse(attachments: [Int!]!, courseId: Int!): Course!
   addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
@@ -451,6 +452,9 @@ input UpdatePersonInput {
   """The person Information"""
   personInformation: UpdatePersonInformationInput
 
+  """List of courses for the teacher"""
+  courseIds: [Float!]
+
   """The generation this student belongs to"""
   generationId: Int
 }
@@ -464,7 +468,25 @@ input UpdatePersonInformationInput {
 
   """Date of birth for this person"""
   dob: String
-  personId: Int!
+  personId: Int
+
+  """List of social media for this person"""
+  socialMedias: [UpdateSocialMediaInput!]
+
+  """List of field experiences for this person"""
+  fieldExperiences: [CreateFieldExperienceInput!]
+}
+
+input UpdateSocialMediaInput {
+  """The ID of this social media information"""
+  id: String
+
+  """The name of the social media platform"""
+  platform: SocialMediaPlatform
+
+  """The URL of the social media"""
+  url: String
+  personId: Int
 }
 
 input UpdateFieldExperienceInput {
@@ -479,15 +501,6 @@ input UpdateFieldExperienceInput {
 
   """The description of the field experience"""
   description: String
-  personId: Int!
-}
-
-input UpdateSocialMediaInput {
-  """The name of the social media platform"""
-  platform: SocialMediaPlatform
-
-  """The URL of the social media"""
-  url: String
   personId: Int!
 }
 

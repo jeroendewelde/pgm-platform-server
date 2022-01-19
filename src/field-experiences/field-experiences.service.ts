@@ -25,7 +25,15 @@ export class FieldExperiencesService {
     return this.fieldExperienceRepository.find();
   }
 
-  findOneById(id: number): Promise<FieldExperience> {
+  // findAllIdsByPersonId(personId: number): Promise<FieldExperience[]> {
+  //   return this.fieldExperienceRepository.find({
+  //     where: {
+  //       personId: personId,
+  //     },
+  //   });
+  // }
+
+  findOneById(id: string): Promise<FieldExperience> {
     return this.fieldExperienceRepository.findOneOrFail(id);
   }
 
@@ -40,7 +48,7 @@ export class FieldExperiencesService {
   }
 
   update(
-    id: number,
+    id: string,
     updateFieldExperienceInput: UpdateFieldExperienceInput
   ): Promise<FieldExperience> {
     return this.fieldExperienceRepository.save({
@@ -49,8 +57,15 @@ export class FieldExperiencesService {
     });
   }
 
-  async remove(id: number): Promise<FieldExperience> {
+  async remove(id: string): Promise<FieldExperience> {
     const fieldExperience = await this.findOneById(id);
     return this.fieldExperienceRepository.remove(fieldExperience);
+  }
+
+  async removeList(fieldExperiences: FieldExperience[]) {
+    const fieldExperienceErased = await this.fieldExperienceRepository.remove(
+      fieldExperiences
+    );
+    return fieldExperienceErased;
   }
 }
