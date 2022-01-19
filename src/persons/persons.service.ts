@@ -40,7 +40,7 @@ export class PersonsService {
       }
     }
 
-    if (courseIds.length > 0) {
+    if (courseIds && courseIds.length > 0) {
       await this.addCoursesToPerson(newPerson.id, courseIds);
     }
 
