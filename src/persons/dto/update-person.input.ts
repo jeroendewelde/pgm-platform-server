@@ -1,7 +1,13 @@
 import { CreatePersonInput } from "./create-person.input";
 import { InputType, Field, Int, PartialType } from "@nestjs/graphql";
 import { PersonType } from "src/scalars/person-type.scalar";
-import { IsNotEmpty, IsString } from "class-validator";
+import {
+  IsNotEmpty,
+  IsString,
+  Matches,
+  MaxLength,
+  MinLength,
+} from "class-validator";
 import { PersonInformation } from "src/person-informations/entities/person-information.entity";
 import { UpdatePersonInformationInput } from "src/person-informations/dto/update-person-information.input";
 
@@ -35,10 +41,23 @@ export class UpdatePersonInput {
   })
   courseIds?: number[];
 
-  // Relations
-  @Field(() => Int, {
-    description: "The generation this student belongs to",
+  @IsNotEmpty()
+  @IsString()
+  @MinLength(9)
+  @MaxLength(9)
+  @Matches(/20[0-9]{2}-20[0-9]{2}/, {
+    message: "The academic year must be in format '2019-2021'",
+  })
+  @Field(() => String, {
+    description: "The years this person was/is a student",
     nullable: true,
   })
-  generationId?: number;
+  academicYear?: string;
+
+  // Relations
+  // @Field(() => Int, {
+  //   description: "The generation this student belongs to",
+  //   nullable: true,
+  // })
+  // generationId?: number;
 }

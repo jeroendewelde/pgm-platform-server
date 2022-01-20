@@ -187,20 +187,6 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
-type Generation {
-  """The ID of the generation"""
-  id: Int!
-
-  """The name of the generation"""
-  name: String!
-
-  """The years of the generation"""
-  years: String!
-
-  """The List of students in this generation"""
-  students: [Person!]!
-}
-
 type Company {
   """The ID of the company"""
   id: Int!
@@ -254,13 +240,10 @@ type Person {
   """The type of the person"""
   type: PersonType!
 
-  """The generation this students belongs to"""
-  generationId: Int
+  """The years this person was/is a student"""
+  academicYear: String
   personInformation: PersonInformation
   intern: Intern
-
-  """The generation this student belongs to"""
-  generation: Generation
   courses: [Course!]!
 }
 
@@ -268,6 +251,17 @@ type Person {
 enum PersonType {
   STUDENT
   TEACHER
+}
+
+type Generation {
+  """The ID of the generation"""
+  id: Int!
+
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
 }
 
 type User {
@@ -298,6 +292,20 @@ enum Role {
 type LoginResponse {
   access_token: String!
   user: User!
+}
+
+type Testimonial {
+  """The ID of the testimonial"""
+  id: Int!
+
+  """The quote"""
+  quote: String!
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
 }
 
 type Query {
@@ -332,6 +340,8 @@ type Query {
   intern(id: Int!): Intern!
   users: [User!]!
   user(id: Int!): User!
+  testimonials: [Testimonial!]!
+  testimonial(id: Int!): Testimonial!
 }
 
 type Mutation {
@@ -379,6 +389,9 @@ type Mutation {
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   signup(loginUserInput: LoginUserInput!): User!
+  createTestimonial(createTestimonialInput: CreateTestimonialInput!): Testimonial!
+  updateTestimonial(updateTestimonialInput: UpdateTestimonialInput!, id: Int!): Testimonial!
+  removeTestimonial(id: Int!): Testimonial!
 }
 
 input CreatePersonInput {
@@ -390,7 +403,9 @@ input CreatePersonInput {
 
   """The type of the person"""
   type: PersonType!
-  generationId: Int
+
+  """The years this person was/is a student"""
+  academicYear: String
 
   """List of courses for the teacher"""
   courseIds: [Float!]
@@ -455,8 +470,8 @@ input UpdatePersonInput {
   """List of courses for the teacher"""
   courseIds: [Float!]
 
-  """The generation this student belongs to"""
-  generationId: Int
+  """The years this person was/is a student"""
+  academicYear: String
 }
 
 input UpdatePersonInformationInput {
@@ -574,6 +589,9 @@ input CreateProjectInput {
 
   """The ID of the course this project was made for"""
   courseId: Int!
+
+  """List of studentIds for the project"""
+  studentIds: [Float!]
 }
 
 input UpdateProjectInput {
@@ -594,6 +612,9 @@ input UpdateProjectInput {
 
   """The ID of the course this project was made for"""
   courseId: Int!
+
+  """List of studentIds for the project"""
+  studentIds: [Float!]
 }
 
 input CreateAttachmentInput {
@@ -733,4 +754,26 @@ input UpdateUserInput {
 input LoginUserInput {
   username: String!
   password: String!
+}
+
+input CreateTestimonialInput {
+  """The quote"""
+  quote: String!
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
+}
+
+input UpdateTestimonialInput {
+  """The quote"""
+  quote: String
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
 }

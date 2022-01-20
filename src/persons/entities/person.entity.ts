@@ -36,11 +36,18 @@ export class Person {
   type: PersonType;
 
   @Column({ nullable: true })
-  @Field(() => Int, {
-    description: "The generation this students belongs to",
+  @Field(() => String, {
+    description: "The years this person was/is a student",
     nullable: true,
   })
-  generationId?: number;
+  academicYear?: string;
+
+  // @Column({ nullable: true })
+  // @Field(() => Int, {
+  //   description: "The generation this students belongs to",
+  //   nullable: true,
+  // })
+  // generationId?: number;
 
   // Relations
   @OneToOne(
@@ -58,14 +65,14 @@ export class Person {
   @Field((type) => Intern, { nullable: true })
   intern?: Intern;
 
-  @ManyToOne(() => Generation, (generation) => generation.students, {
-    onDelete: "CASCADE",
-  })
-  @Field(() => Generation, {
-    description: "The generation this student belongs to",
-    nullable: true,
-  })
-  generation?: Generation;
+  // @ManyToOne(() => Generation, (generation) => generation.students, {
+  //   onDelete: "CASCADE",
+  // })
+  // @Field(() => Generation, {
+  //   description: "The generation this student belongs to",
+  //   nullable: true,
+  // })
+  // generation?: Generation;
 
   @ManyToMany(() => Project, (project) => project.students, { nullable: true })
   projects?: Project[];

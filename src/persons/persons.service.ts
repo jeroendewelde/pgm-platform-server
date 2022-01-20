@@ -26,6 +26,8 @@ export class PersonsService {
   async create(createPersonInput: CreatePersonInput): Promise<Person> {
     const { courseIds, personInformation, ...personObject } = createPersonInput;
 
+    console.log(".....personObject", personObject);
+
     const newPerson = await this.personRepository.save(personObject);
 
     // Add person Information
@@ -149,7 +151,7 @@ export class PersonsService {
       console.log("no personInformation...");
     }
 
-    if (courseIds.length > 0) {
+    if (courseIds && courseIds.length > 0) {
       await this.addCoursesToPerson(id, courseIds);
     }
 
