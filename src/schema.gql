@@ -111,13 +111,13 @@ type Course {
 
 type SocialMedia {
   """The ID of this social media information"""
-  id: Int!
+  id: String!
 
   """The name of the social media platform"""
-  platform: String!
+  platform: SocialMediaPlatform
 
   """The URL of the social media"""
-  url: String!
+  url: String
 
   """The ID of the person this social media belongs to"""
   personId: Int!
@@ -126,9 +126,20 @@ type SocialMedia {
   person: PersonInformation!
 }
 
+"""The name of the social media platform"""
+enum SocialMediaPlatform {
+  FACEBOOK
+  TWITTER
+  INSTAGRAM
+  LINKEDIN
+  YOUTUBE
+  GITHUB
+  OTHER
+}
+
 type FieldExperience {
   """The ID of the field experience"""
-  id: Int!
+  id: String!
 
   """The duration of the field experience"""
   duration: String
@@ -141,7 +152,7 @@ type FieldExperience {
 
   """The description of the field experience"""
   description: String
-  personId: Int
+  personId: Int!
 
   """The person this field experience belongs to"""
   person: PersonInformation!
@@ -156,13 +167,13 @@ type PersonInformation {
 
   """The bio for this person"""
   bio: String
-  dob: DateTime!
+  dob: DateTime
 
   """The ID of the person this information belongs to"""
   personId: Int!
 
   """The person this person information belongs to"""
-  person: Person
+  person: Person!
 
   """List of social media for this person"""
   socialMedias: [SocialMedia!]
@@ -175,20 +186,6 @@ type PersonInformation {
 A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
 """
 scalar DateTime
-
-type Generation {
-  """The ID of the generation"""
-  id: Int!
-
-  """The name of the generation"""
-  name: String!
-
-  """The years of the generation"""
-  years: String!
-
-  """The List of students in this generation"""
-  students: [Person!]!
-}
 
 type Company {
   """The ID of the company"""
@@ -243,19 +240,28 @@ type Person {
   """The type of the person"""
   type: PersonType!
 
-  """The generation this students belongs to"""
-  generationId: Int
+  """The years this person was/is a student"""
+  academicYear: String
   personInformation: PersonInformation
   intern: Intern
-
-  """The generation this student belongs to"""
-  generation: Generation
+  courses: [Course!]!
 }
 
 """The type of the person"""
 enum PersonType {
   STUDENT
   TEACHER
+}
+
+type Generation {
+  """The ID of the generation"""
+  id: Int!
+
+  """The name of the generation"""
+  name: String!
+
+  """The years of the generation"""
+  years: String!
 }
 
 type User {
@@ -288,6 +294,20 @@ type LoginResponse {
   user: User!
 }
 
+type Testimonial {
+  """The ID of the testimonial"""
+  id: Int!
+
+  """The quote"""
+  quote: String!
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
+}
+
 type Query {
   persons: [Person!]!
   person(id: Int!): Person!
@@ -295,15 +315,17 @@ type Query {
   teachers: [Person!]!
   personInformations: [PersonInformation!]!
   personInformation(id: Int!): PersonInformation!
+  personInformationByPersonId(id: Int!): PersonInformation!
   fieldExperiences: [FieldExperience!]!
-  fieldExperience(id: Int!): FieldExperience!
+  fieldExperience(id: String!): FieldExperience!
+  fieldExperiencesByPersonId(id: Int!): [FieldExperience!]!
   socialMedias: [SocialMedia!]!
-  socialMedia(id: Int!): SocialMedia!
-  projects: [Project!]!
-  project(id: Int!): Project!
+  socialMedia(id: String!): SocialMedia!
   courses: [Course!]!
   course(id: Int!): Course!
   coursesByLearningLineId(learningLineId: Int!): [Course!]!
+  projects: [Project!]!
+  project(id: Int!): Project!
   attachments: [Attachment!]!
   attachment(id: Int!): Attachment!
   learningLines: [LearningLine!]!
@@ -318,6 +340,8 @@ type Query {
   intern(id: Int!): Intern!
   users: [User!]!
   user(id: Int!): User!
+  testimonials: [Testimonial!]!
+  testimonial(id: Int!): Testimonial!
 }
 
 type Mutation {
@@ -328,21 +352,21 @@ type Mutation {
   updatePersonInformation(updatePersonInformationInput: UpdatePersonInformationInput!, id: Int!): PersonInformation!
   removePersonInformation(id: Int!): PersonInformation!
   createFieldExperience(createFieldExperienceInput: CreateFieldExperienceInput!): FieldExperience!
-  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: Int!): FieldExperience!
-  removeFieldExperience(id: Int!): FieldExperience!
+  updateFieldExperience(updateFieldExperienceInput: UpdateFieldExperienceInput!, id: String!): FieldExperience!
+  removeFieldExperience(id: String!): FieldExperience!
   createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
-  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: Int!): SocialMedia!
-  removeSocialMedia(id: Int!): SocialMedia!
-  createProject(createProjectInput: CreateProjectInput!): Project!
-  addAttachmentsToProject(attachments: [Int!]!, projectId: Int!): Project!
-  addStudentsToProject(studentIds: [Int!]!, projectId: Int!): Project!
-  updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
-  removeProject(id: Int!): Project!
+  updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: String!): SocialMedia!
+  removeSocialMedia(id: String!): SocialMedia!
   createCourse(createCourseInput: CreateCourseInput!): Course!
   addAttachmentsToCourse(attachments: [Int!]!, courseId: Int!): Course!
   addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
   updateCourse(updateCourseInput: UpdateCourseInput!, id: Int!): Course!
   removeCourse(id: Int!): Course!
+  createProject(createProjectInput: CreateProjectInput!): Project!
+  addAttachmentsToProject(attachments: [Int!]!, projectId: Int!): Project!
+  addStudentsToProject(studentIds: [Int!]!, projectId: Int!): Project!
+  updateProject(updateProjectInput: UpdateProjectInput!, id: Int!): Project!
+  removeProject(id: Int!): Project!
   createAttachment(createAttachmentInput: CreateAttachmentInput!): Attachment!
   updateAttachment(updateAttachmentInput: UpdateAttachmentInput!, id: Int!): Attachment!
   removeAttachment(id: Int!): Attachment!
@@ -365,6 +389,9 @@ type Mutation {
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
   signup(loginUserInput: LoginUserInput!): User!
+  createTestimonial(createTestimonialInput: CreateTestimonialInput!): Testimonial!
+  updateTestimonial(updateTestimonialInput: UpdateTestimonialInput!, id: Int!): Testimonial!
+  removeTestimonial(id: Int!): Testimonial!
 }
 
 input CreatePersonInput {
@@ -376,21 +403,13 @@ input CreatePersonInput {
 
   """The type of the person"""
   type: PersonType!
-  generationId: Int
-}
 
-input UpdatePersonInput {
-  """The first name of the person"""
-  firstName: String!
+  """The years this person was/is a student"""
+  academicYear: String
 
-  """The last name of the person"""
-  lastName: String!
-
-  """The type of the person"""
-  type: PersonType!
-
-  """The generation this student belongs to"""
-  generationId: Int
+  """List of courses for the teacher"""
+  courseIds: [Float!]
+  personInformation: CreatePersonInformationInput
 }
 
 input CreatePersonInformationInput {
@@ -403,17 +422,20 @@ input CreatePersonInformationInput {
   """Date of birth for this person"""
   dob: String
   personId: Int
+
+  """List of social media for this person"""
+  socialMedias: [CreateSocialMediaInput!]
+
+  """List of field experiences for this person"""
+  fieldExperiences: [CreateFieldExperienceInput!]
 }
 
-input UpdatePersonInformationInput {
-  """The quote for this person"""
-  quote: String
+input CreateSocialMediaInput {
+  """The name of the social media platform"""
+  platform: SocialMediaPlatform
 
-  """The bio for this person"""
-  bio: String
-
-  """Date of birth for this person"""
-  dob: String
+  """The URL of the social media"""
+  url: String
   personId: Int
 }
 
@@ -429,7 +451,57 @@ input CreateFieldExperienceInput {
 
   """The description of the field experience"""
   description: String
-  personId: Int!
+  personId: Int
+}
+
+input UpdatePersonInput {
+  """The first name of the person"""
+  firstName: String!
+
+  """The last name of the person"""
+  lastName: String!
+
+  """The type of the person"""
+  type: PersonType!
+
+  """The person Information"""
+  personInformation: UpdatePersonInformationInput
+
+  """List of courses for the teacher"""
+  courseIds: [Float!]
+
+  """The years this person was/is a student"""
+  academicYear: String
+}
+
+input UpdatePersonInformationInput {
+  """The quote for this person"""
+  quote: String
+
+  """The bio for this person"""
+  bio: String
+
+  """Date of birth for this person"""
+  dob: String
+  personId: Int
+
+  """List of social media for this person"""
+  socialMedias: [UpdateSocialMediaInput!]
+
+  """List of field experiences for this person"""
+  fieldExperiences: [CreateFieldExperienceInput!]
+}
+
+input UpdateSocialMediaInput {
+  """The ID of this social media information"""
+  id: String
+
+  """The name of the social media platform"""
+  platform: SocialMediaPlatform
+
+  """The URL of the social media"""
+  url: String
+  personId: Int
 }
 
 input UpdateFieldExperienceInput {
@@ -445,64 +517,6 @@ input UpdateFieldExperienceInput {
   """The description of the field experience"""
   description: String
   personId: Int!
-}
-
-input CreateSocialMediaInput {
-  """The name of the social media platform"""
-  platform: String!
-
-  """The URL of the social media"""
-  url: String!
-  personId: Int!
-}
-
-input UpdateSocialMediaInput {
-  """The name of the social media platform"""
-  platform: String!
-
-  """The URL of the social media"""
-  url: String!
-  personId: Int!
-}
-
-input CreateProjectInput {
-  """The name of the project"""
-  name: String!
-
-  """The teaser text for the project"""
-  teaserText: String!
-
-  """The full description of the project"""
-  body: String!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """List of tags for the project"""
-  tags: [String!]
-
-  """The ID of the course this project was made for"""
-  courseId: Int!
-}
-
-input UpdateProjectInput {
-  """The name of the project"""
-  name: String!
-
-  """The teaser text for the project"""
-  teaserText: String!
-
-  """The full description of the project"""
-  body: String!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """List of tags for the project"""
-  tags: [String!]
-
-  """The ID of the course this project was made for"""
-  courseId: Int!
 }
 
 input CreateCourseInput {
@@ -526,29 +540,81 @@ input CreateCourseInput {
 
   """The ID of the specialisation this project belongs to"""
   specialisationId: Int = null
+
+  """List of teacherIds for the course"""
+  teacherIds: [Float!]
 }
 
 input UpdateCourseInput {
   """The name of the course"""
-  name: String!
+  name: String
 
   """The description of the course"""
-  description: String!
+  description: String
 
   """The number of the term"""
-  term: Int!
+  term: Int
 
   """The academic year of the project"""
-  academicYear: String!
+  academicYear: String
 
   """List of tags for the course"""
   tags: [String!]
 
   """The ID of the learning line this project belongs to"""
-  learningLineId: Int!
+  learningLineId: Int
 
   """The ID of the specialisation this project belongs to"""
   specialisationId: Int = null
+
+  """List of teacherIds for the course"""
+  teacherIds: [Float!]
+}
+
+input CreateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """List of studentIds for the project"""
+  studentIds: [Float!]
+}
+
+input UpdateProjectInput {
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """List of studentIds for the project"""
+  studentIds: [Float!]
 }
 
 input CreateAttachmentInput {
@@ -627,14 +693,9 @@ input CreateCompanyInput {
 
   """The teaser image of the company"""
   teaserImage: String
-}
 
-input UpdateCompanyInput {
-  """The name of the company"""
-  name: String!
-
-  """The teaser image of the company"""
-  teaserImage: String
+  """The list of interns who worked at this company"""
+  interns: [CreateInternInput!]
 }
 
 input CreateInternInput {
@@ -654,6 +715,20 @@ input CreateInternInput {
   companyId: Int
 }
 
+input UpdateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+
+  """The list of interns who worked at this company"""
+  interns: [UpdateInternInput!]
+
+  """The ID of the company"""
+  id: Int
+}
+
 input UpdateInternInput {
   """The name of the function"""
   function: String
@@ -669,6 +744,9 @@ input UpdateInternInput {
 
   """The ID of the company this intern worked at"""
   companyId: Int
+
+  """The ID of the intern"""
+  id: Int
 }
 
 input UpdateUserInput {
@@ -688,4 +766,26 @@ input UpdateUserInput {
 input LoginUserInput {
   username: String!
   password: String!
+}
+
+input CreateTestimonialInput {
+  """The quote"""
+  quote: String!
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
+}
+
+input UpdateTestimonialInput {
+  """The quote"""
+  quote: String
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
 }
