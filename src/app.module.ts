@@ -43,6 +43,9 @@ import { User } from "./users/entities/user.entity";
 import { AuthModule } from "./auth/auth.module";
 import { TestimonialsModule } from "./testimonials/testimonials.module";
 import { Testimonial } from "./testimonials/entities/testimonial.entity";
+import { CloudinaryModule } from "./cloudinary/cloudinary.module";
+import { Cloudinary } from "./cloudinary";
+// import { Cloudinary } from './cloudinary';
 
 @Module({
   imports: [
@@ -90,8 +93,9 @@ import { Testimonial } from "./testimonials/entities/testimonial.entity";
     UsersModule,
     AuthModule,
     TestimonialsModule,
+    CloudinaryModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, Cloudinary],
 })
 export class AppModule {}

@@ -693,14 +693,9 @@ input CreateCompanyInput {
 
   """The teaser image of the company"""
   teaserImage: String
-}
 
-input UpdateCompanyInput {
-  """The name of the company"""
-  name: String!
-
-  """The teaser image of the company"""
-  teaserImage: String
+  """The list of interns who worked at this company"""
+  interns: [CreateInternInput!]
 }
 
 input CreateInternInput {
@@ -720,6 +715,20 @@ input CreateInternInput {
   companyId: Int
 }
 
+input UpdateCompanyInput {
+  """The name of the company"""
+  name: String!
+
+  """The teaser image of the company"""
+  teaserImage: String
+
+  """The list of interns who worked at this company"""
+  interns: [UpdateInternInput!]
+
+  """The ID of the company"""
+  id: Int
+}
+
 input UpdateInternInput {
   """The name of the function"""
   function: String
@@ -735,6 +744,9 @@ input UpdateInternInput {
 
   """The ID of the company this intern worked at"""
   companyId: Int
+
+  """The ID of the intern"""
+  id: Int
 }
 
 input UpdateUserInput {

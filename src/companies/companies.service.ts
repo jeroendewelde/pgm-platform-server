@@ -1,21 +1,35 @@
-import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Intern } from 'src/interns/entities/intern.entity';
-import { Repository } from 'typeorm';
-import { CreateCompanyInput } from './dto/create-company.input';
-import { UpdateCompanyInput } from './dto/update-company.input';
-import { Company } from './entities/company.entity';
+import { Injectable, BadRequestException, UploadedFile } from "@nestjs/common";
+import { InjectRepository } from "@nestjs/typeorm";
+import { CloudinaryService } from "src/cloudinary/cloudinary.service";
+import { Intern } from "src/interns/entities/intern.entity";
+import { Repository } from "typeorm";
+import { CreateCompanyInput } from "./dto/create-company.input";
+import { UpdateCompanyInput } from "./dto/update-company.input";
+import { Company } from "./entities/company.entity";
 
 @Injectable()
 export class CompaniesService {
   constructor(
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
+    private cloudinaryService: CloudinaryService
   ) {}
 
-  create(createCompanyInput: CreateCompanyInput): Promise<Company> {
+  async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
     const newCompany = this.companyRepository.create(createCompanyInput);
+
+    console.log("newCompany", newCompany);
     return this.companyRepository.save(newCompany);
+  }
+
+  async uploadImageToCloudinary(
+    @UploadedFile()
+    file: // file: Express.Multer.File
+    any
+  ) {
+    return await this.cloudinaryService.uploadImage(file).catch(() => {
+      throw new BadRequestException("Invalid file type.");
+    });
   }
 
   findAll(): Promise<Company[]> {
@@ -28,18 +42,33 @@ export class CompaniesService {
 
   async findAllInterns(companyId: number): Promise<Intern[]> {
     const company = await this.companyRepository.findOneOrFail(companyId, {
-      relations: ['interns'],
+      relations: ["interns"],
     });
 
-    if(company.interns) return company.interns;
+    if (company.interns) return company.interns;
     return [];
   }
 
-  update(id: number, updateCompanyInput: UpdateCompanyInput) {
-    return this.companyRepository.save({
+  async update(id: number, updateCompanyInput: UpdateCompanyInput) {
+    const { interns, ...companyObject } = updateCompanyInput;
+
+    const updatedCompany1 = this.companyRepository.save({
       id: id,
-      ...updateCompanyInput,
+      companyObject,
     });
+
+    let company = await this.companyRepository.findOneOrFail(id, {
+      relations: ["interns"],
+    });
+
+    company.interns = interns;
+
+    const updatedCompany = await this.companyRepository.save({
+      id: id,
+      ...company,
+    });
+    console.log("....updated...", updatedCompany);
+    return updatedCompany;
   }
 
   async remove(id: number): Promise<Company> {
