@@ -4,7 +4,7 @@ import { InputType, Field, Int, PartialType } from "@nestjs/graphql";
 @InputType()
 export class UpdateInternInput extends PartialType(CreateInternInput) {
   @Field(() => Int, { description: "The ID of the intern", nullable: true })
-  id: number;
+  id?: number;
 
   @Field(() => String, {
     description: "The name of the function",

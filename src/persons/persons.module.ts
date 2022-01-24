@@ -1,5 +1,6 @@
 import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
+import { CompaniesModule } from "src/companies/companies.module";
 import { CoursesModule } from "src/courses/courses.module";
 import { PersonInformationsModule } from "src/person-informations/person-informations.module";
 

@@ -36,8 +36,6 @@ export class TestimonialsService {
 
   async remove(id: number): Promise<Testimonial> {
     const toBeDeletedTestimonial = await this.findOneById(id);
-    await this.testimonialRepository.remove(toBeDeletedTestimonial);
-
-    return toBeDeletedTestimonial;
+    return this.testimonialRepository.remove(toBeDeletedTestimonial);
   }
 }

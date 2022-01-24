@@ -569,6 +569,9 @@ input UpdateCourseInput {
 
   """List of teacherIds for the course"""
   teacherIds: [Float!]
+
+  """The list of teachers who give this course"""
+  teachers: [UpdatePersonInput!]
 }
 
 input CreateProjectInput {

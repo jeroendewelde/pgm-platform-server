@@ -138,9 +138,18 @@ export class CoursesService {
   ): Promise<Course> {
     const { teacherIds, ...courseObject } = updateCourseInput;
 
-    if (teacherIds && teacherIds.length > 0) {
-      await this.updateTeachersInCourse(id, teacherIds);
-    }
+    // const updatedCourse1 = this.courseRepository.save({
+    //   id: id,
+    //   courseObject
+    // })
+
+    // let course = await this.courseRepository.findOneOrFail(id, {
+    //   relations: ["teachers"]
+    // });
+
+    // if (teacherIds && teacherIds.length > 0) {
+    await this.updateTeachersInCourse(id, teacherIds);
+    // }
 
     return this.courseRepository.save({
       id: id,
@@ -162,7 +171,8 @@ export class CoursesService {
       const teacher = await this.personsService.findOneById(teacherId);
 
       if (teacher.type === "TEACHER") {
-        if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
+        // if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
+        course.teachers.push(teacher);
       }
     });
 

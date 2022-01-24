@@ -11,6 +11,8 @@ import {
   MaxLength,
   MinLength,
 } from "class-validator";
+import { UpdatePersonInput } from "src/persons/dto/update-person.input";
+import { Person } from "src/persons/entities/person.entity";
 
 @InputType()
 export class UpdateCourseInput extends PartialType(CreateCourseInput) {
@@ -66,4 +68,11 @@ export class UpdateCourseInput extends PartialType(CreateCourseInput) {
     nullable: true,
   })
   specialisationId?: number = null;
+
+  // Relations
+  @Field(() => [UpdatePersonInput], {
+    description: "The list of teachers who give this course",
+    nullable: true,
+  })
+  teachers?: Person[];
 }
