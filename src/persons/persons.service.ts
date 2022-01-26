@@ -29,10 +29,11 @@ export class PersonsService {
 
     console.log(".....personObject", personObject);
 
-    const newPerson = await this.personRepository.save({
+    const newPerson = await this.personRepository.create({
       avatarUrl: `${process.env.CWD}${avatarUrl}`,
       ...personObject,
     });
+    const createdPerson = await this.personRepository.save(newPerson);
 
     // Add person Information
     if (personInformation) {
@@ -43,7 +44,7 @@ export class PersonsService {
         personInformation.dob !== null
       ) {
         console.log("WEL person info");
-        personInformation.personId = newPerson.id;
+        personInformation.personId = createdPerson.id;
         await this.personInformationService.create(personInformation);
       } else {
         console.log("NO person info");
@@ -51,10 +52,12 @@ export class PersonsService {
     }
 
     if (courseIds && courseIds.length > 0) {
-      await this.addCoursesToPerson(newPerson.id, courseIds);
+      return await this.addCoursesToPerson(createdPerson.id, courseIds);
     }
-
-    return newPerson;
+    return createdPerson;
+    // } else {
+    //   return this.personRepository.save(newPerson);
+    // }
   }
 
   async addCoursesToPerson(

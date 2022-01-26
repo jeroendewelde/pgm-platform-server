@@ -31,16 +31,16 @@ export class ProjectsService {
   async create(createProjectInput: CreateProjectInput): Promise<Project> {
     const { studentIds, teaserImage, ...projectObject } = createProjectInput;
 
-    const newProject = await this.projectRepository.save({
+    const newProject = await this.projectRepository.create({
       teaserImage: `${process.env.CWD}${teaserImage}`,
-      projectObject,
+      ...projectObject,
     });
 
     if (studentIds && studentIds.length > 0) {
-      await this.addStudentsToProject(newProject.id, studentIds);
+      return await this.addStudentsToProject(newProject.id, studentIds);
+    } else {
+      return this.projectRepository.save(newProject);
     }
-
-    return newProject;
   }
 
   async addAttachmentsToProject(

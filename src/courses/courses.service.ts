@@ -29,19 +29,17 @@ export class CoursesService {
 
   async create(createCourseInput: CreateCourseInput): Promise<Course> {
     const { teacherIds, teaserImage, ...courseObject } = createCourseInput;
-    // const newCourse = await this.courseRepository.create(courseObject);
 
-    const newCourse = await this.courseRepository.save({
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      courseObject,
+    const newCourse = await this.courseRepository.create({
+      teaserImage: teaserImage ? `${process.env.CWD}${teaserImage}` : null,
+      ...courseObject,
     });
-    console.log("....new course ID....", newCourse.id);
 
     if (teacherIds && teacherIds.length > 0) {
-      await this.addTeachersToCourse(newCourse.id, teacherIds);
+      return await this.addTeachersToCourse(newCourse.id, teacherIds);
+    } else {
+      return this.courseRepository.save(newCourse);
     }
-
-    return newCourse;
   }
 
   async addAttachmentsToCourse(
