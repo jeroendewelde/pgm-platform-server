@@ -34,6 +34,12 @@ export class CreatePersonInput {
   })
   academicYear?: string;
 
+  @Field(() => String, {
+    description: "The avatar url for the person",
+    nullable: true,
+  })
+  avatarUrl?: string;
+
   // Relations
   // @Field(() => Int, { nullable: true })
   // generationId?: number;

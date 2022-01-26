@@ -23,14 +23,18 @@ export class ProjectsService {
     private projectRepository: Repository<Project>,
     @Inject(forwardRef(() => CoursesService))
     private coursesService: CoursesService,
+    @Inject(forwardRef(() => PersonsService))
     private personsService: PersonsService,
     private attachmentsService: AttachmentsService
   ) {}
 
   async create(createProjectInput: CreateProjectInput): Promise<Project> {
-    const { studentIds, ...projectObject } = createProjectInput;
+    const { studentIds, teaserImage, ...projectObject } = createProjectInput;
 
-    const newProject = await this.projectRepository.save(projectObject);
+    const newProject = await this.projectRepository.save({
+      teaserImage: `${process.env.CWD}${teaserImage}`,
+      projectObject,
+    });
 
     if (studentIds && studentIds.length > 0) {
       await this.addStudentsToProject(newProject.id, studentIds);
@@ -118,7 +122,7 @@ export class ProjectsService {
     id: number,
     updateProjectInput: UpdateProjectInput
   ): Promise<Project> {
-    const { studentIds, ...projectObject } = updateProjectInput;
+    const { studentIds, teaserImage, ...projectObject } = updateProjectInput;
     console.log("....studentIds...", studentIds);
 
     if (studentIds && studentIds.length > 0) {
@@ -127,6 +131,7 @@ export class ProjectsService {
 
     return this.projectRepository.save({
       id: id,
+      teaserImage: `${process.env.CWD}${teaserImage}`,
       ...projectObject,
     });
   }

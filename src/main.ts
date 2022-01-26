@@ -1,15 +1,16 @@
-import { ValidationPipe } from '@nestjs/common';
-import { NestFactory } from '@nestjs/core';
-import { AppModule } from './app.module';
+import { ValidationPipe } from "@nestjs/common";
+import { NestFactory } from "@nestjs/core";
+import { graphqlUploadExpress } from "graphql-upload";
+import { AppModule } from "./app.module";
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
-  // console.log(process.env);
+
+  app.enableCors();
+
   app.useGlobalPipes(new ValidationPipe());
-  console.log('listening to port ', process.env.PORT);
+  console.log("listening to port ", process.env.PORT);
 
   await app.listen(process.env.PORT || 3000);
-
-  // await app.listen(3000);
 }
 bootstrap();

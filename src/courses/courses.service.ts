@@ -13,6 +13,7 @@ import { Person } from "src/persons/entities/person.entity";
 import { AttachmentsService } from "src/attachments/attachments.service";
 import { Attachment } from "src/attachments/entities/attachment.entity";
 import { LearningLine } from "src/learning-lines/entities/learning-line.entity";
+import { Specialisation } from "src/specialisations/entities/specialisation.entity";
 
 @Injectable()
 export class CoursesService {
@@ -27,10 +28,13 @@ export class CoursesService {
   ) {}
 
   async create(createCourseInput: CreateCourseInput): Promise<Course> {
-    const { teacherIds, ...courseObject } = createCourseInput;
+    const { teacherIds, teaserImage, ...courseObject } = createCourseInput;
     // const newCourse = await this.courseRepository.create(courseObject);
 
-    const newCourse = await this.courseRepository.save(courseObject);
+    const newCourse = await this.courseRepository.save({
+      teaserImage: `${process.env.CWD}${teaserImage}`,
+      courseObject,
+    });
     console.log("....new course ID....", newCourse.id);
 
     if (teacherIds && teacherIds.length > 0) {
@@ -119,6 +123,15 @@ export class CoursesService {
     return null;
   }
 
+  async getSpecialisation(courseId: number): Promise<Specialisation> {
+    const course = await this.courseRepository.findOneOrFail(courseId, {
+      relations: ["specialisation"],
+    });
+
+    if (course.specialisation) return course.specialisation;
+    return null;
+  }
+
   getProjects(courseId: number): Promise<Project[]> {
     return this.projectService.findByCourseId(courseId);
   }
@@ -136,7 +149,7 @@ export class CoursesService {
     id: number,
     updateCourseInput: UpdateCourseInput
   ): Promise<Course> {
-    const { teacherIds, ...courseObject } = updateCourseInput;
+    const { teacherIds, teaserImage, ...courseObject } = updateCourseInput;
 
     // const updatedCourse1 = this.courseRepository.save({
     //   id: id,
@@ -153,6 +166,7 @@ export class CoursesService {
 
     return this.courseRepository.save({
       id: id,
+      teaserImage: `${process.env.CWD}${teaserImage}`,
       ...courseObject,
     });
   }

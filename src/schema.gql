@@ -2,48 +2,6 @@
 # THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
 # ------------------------------------------------------
 
-type Project {
-  """The ID of the project"""
-  id: Int!
-
-  """The name of the project"""
-  name: String!
-
-  """The teaser text for the project"""
-  teaserText: String!
-
-  """The full description of the project"""
-  body: String!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """List of tags for the project"""
-  tags: [String!]
-
-  """The ID of the course this project was made for"""
-  courseId: Int!
-
-  """The course this project belongs to"""
-  course: Course!
-  attachments: [Attachment!]!
-  students: [Person!]!
-}
-
-type Attachment {
-  """The ID of the attachment"""
-  id: Int!
-
-  """The name of the attachment"""
-  name: String!
-
-  """The url of the attachment"""
-  url: String!
-
-  """The type of the attachment"""
-  type: String!
-}
-
 type LearningLine {
   """The ID of the learning line"""
   id: Int!
@@ -56,57 +14,6 @@ type LearningLine {
 
   """The List of courses made for this learning line"""
   courses: [Course!]!
-}
-
-type Specialisation {
-  """The ID of the specialisation"""
-  id: Int!
-
-  """The name of the specialisation"""
-  name: String!
-
-  """The academic year of this specialisation"""
-  academicYear: String!
-
-  """The List of courses made for this specialisation"""
-  courses: [Course!]
-}
-
-type Course {
-  """The ID of the course"""
-  id: Int!
-
-  """The name of the course"""
-  name: String!
-
-  """The description of the course"""
-  description: String!
-
-  """The number of the term"""
-  term: Int!
-
-  """The academic year of the project"""
-  academicYear: String!
-
-  """List of tags for the course"""
-  tags: [String!]
-
-  """The ID of the learning line this project belongs to"""
-  learningLineId: Int!
-
-  """The ID of the specialisation this project belongs to"""
-  specialisationId: Int
-
-  """The List of projects made for this course"""
-  projects: [Project!]
-
-  """The learning line this course belongs to"""
-  learningLine: LearningLine!
-
-  """The specialisation this course belongs to"""
-  specialisation: Specialisation
-  attachments: [Attachment!]!
-  teachers: [Person!]!
 }
 
 type SocialMedia {
@@ -187,6 +94,37 @@ A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date
 """
 scalar DateTime
 
+type Project {
+  """The ID of the project"""
+  id: Int!
+
+  """The name of the project"""
+  name: String!
+
+  """The teaser text for the project"""
+  teaserText: String!
+
+  """The full description of the project"""
+  body: String!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The teaser image of the project"""
+  teaserImage: String
+
+  """List of tags for the project"""
+  tags: [String!]
+
+  """The ID of the course this project was made for"""
+  courseId: Int!
+
+  """The course this project belongs to"""
+  course: Course!
+  attachments: [Attachment!]!
+  students: [Person!]!
+}
+
 type Company {
   """The ID of the company"""
   id: Int!
@@ -242,6 +180,9 @@ type Person {
 
   """The years this person was/is a student"""
   academicYear: String
+
+  """The avatar url for the person"""
+  avatarUrl: String
   personInformation: PersonInformation
   intern: Intern
   courses: [Course!]!
@@ -253,6 +194,74 @@ enum PersonType {
   TEACHER
 }
 
+type Specialisation {
+  """The ID of the specialisation"""
+  id: Int!
+
+  """The name of the specialisation"""
+  name: String!
+
+  """The academic year of this specialisation"""
+  academicYear: String!
+
+  """The List of courses made for this specialisation"""
+  courses: [Course!]
+}
+
+type Course {
+  """The ID of the course"""
+  id: Int!
+
+  """The name of the course"""
+  name: String!
+
+  """The description of the course"""
+  description: String!
+
+  """The number of the term"""
+  term: Int!
+
+  """The academic year of the project"""
+  academicYear: String!
+
+  """The teaser image of the course"""
+  teaserImage: String
+
+  """List of tags for the course"""
+  tags: [String!]
+
+  """The ID of the learning line this project belongs to"""
+  learningLineId: Int!
+
+  """The ID of the specialisation this project belongs to"""
+  specialisationId: Int
+
+  """The List of projects made for this course"""
+  projects: [Project!]
+
+  """The learning line this course belongs to"""
+  learningLine: LearningLine!
+
+  """The specialisation this course belongs to"""
+  specialisation: Specialisation
+  attachments: [Attachment!]!
+  teachers: [Person!]!
+}
+
+type Attachment {
+  """The ID of the attachment"""
+  id: Int!
+
+  """The name of the attachment"""
+  name: String!
+
+  """The url of the attachment"""
+  url: String!
+
+  """The type of the attachment"""
+  type: String!
+}
+
 type Generation {
   """The ID of the generation"""
   id: Int!
@@ -262,6 +271,20 @@ type Generation {
 
   """The years of the generation"""
   years: String!
+}
+
+type Testimonial {
+  """The ID of the testimonial"""
+  id: Int!
+
+  """The quote"""
+  quote: String!
+
+  """The name of the writer"""
+  name: String
+
+  """The related company"""
+  company: String
 }
 
 type User {
@@ -292,20 +315,6 @@ enum Role {
 type LoginResponse {
   access_token: String!
   user: User!
-}
-
-type Testimonial {
-  """The ID of the testimonial"""
-  id: Int!
-
-  """The quote"""
-  quote: String!
-
-  """The name of the writer"""
-  name: String
-
-  """The related company"""
-  company: String
 }
 
 type Query {
@@ -407,6 +416,9 @@ input CreatePersonInput {
   """The years this person was/is a student"""
   academicYear: String
 
+  """The avatar url for the person"""
+  avatarUrl: String
+
   """List of courses for the teacher"""
   courseIds: [Float!]
   personInformation: CreatePersonInformationInput
@@ -472,6 +484,9 @@ input UpdatePersonInput {
 
   """The years this person was/is a student"""
   academicYear: String
+
+  """The avatar url for the person"""
+  avatarUrl: String
 }
 
 input UpdatePersonInformationInput {
@@ -532,6 +547,9 @@ input CreateCourseInput {
   """The academic year of the project"""
   academicYear: String!
 
+  """The teaser image of the course"""
+  teaserImage: String
+
   """List of tags for the course"""
   tags: [String!]
 
@@ -557,6 +575,9 @@ input UpdateCourseInput {
 
   """The academic year of the project"""
   academicYear: String
+
+  """The teaser image of the course"""
+  teaserImage: String
 
   """List of tags for the course"""
   tags: [String!]
@@ -587,6 +608,9 @@ input CreateProjectInput {
   """The academic year of the project"""
   academicYear: String!
 
+  """The teaser image of the project"""
+  teaserImage: String
+
   """List of tags for the project"""
   tags: [String!]
 
@@ -609,6 +633,9 @@ input UpdateProjectInput {
 
   """The academic year of the project"""
   academicYear: String!
+
+  """The teaser image of the project"""
+  teaserImage: String
 
   """List of tags for the project"""
   tags: [String!]

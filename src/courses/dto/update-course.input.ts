@@ -50,6 +50,11 @@ export class UpdateCourseInput extends PartialType(CreateCourseInput) {
     nullable: true,
   })
   academicYear?: string;
+  @Field(() => String, {
+    description: "The teaser image of the course",
+    nullable: true,
+  })
+  teaserImage?: string;
 
   @Field(() => [String], {
     description: "List of tags for the course",

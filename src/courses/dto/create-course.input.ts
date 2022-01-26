@@ -43,6 +43,12 @@ export class CreateCourseInput {
   @Field(() => String, { description: "The academic year of the project" })
   academicYear: string;
 
+  @Field(() => String, {
+    description: "The teaser image of the course",
+    nullable: true,
+  })
+  teaserImage?: string;
+
   @Field(() => [String], {
     description: "List of tags for the course",
     nullable: true,

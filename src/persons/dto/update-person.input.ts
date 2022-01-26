@@ -47,6 +47,12 @@ export class UpdatePersonInput {
   })
   academicYear?: string;
 
+  @Field(() => String, {
+    description: "The avatar url for the person",
+    nullable: true,
+  })
+  avatarUrl?: string;
+
   // Relations
   // @Field(() => Int, {
   //   description: "The generation this student belongs to",

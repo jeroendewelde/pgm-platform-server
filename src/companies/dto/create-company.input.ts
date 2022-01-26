@@ -4,8 +4,9 @@ import { Intern } from "src/interns/entities/intern.entity";
 // import { Upload } from "src/scalars/upload.scalar";
 import { File } from "src/scalars/Upload";
 // import { File } from "graphql-upload";
-import { GraphQLUpload } from "graphql-upload";
+import { GraphQLUpload, FileUpload } from "graphql-upload";
 import { Upload } from "src/scalars/upload.scalar";
+// import { Upload } from "src/scalars/upload.scalar";
 
 @InputType()
 export class CreateCompanyInput {

@@ -24,21 +24,29 @@ export class PersonsService {
   ) {}
 
   async create(createPersonInput: CreatePersonInput): Promise<Person> {
-    const { courseIds, personInformation, ...personObject } = createPersonInput;
+    const { avatarUrl, courseIds, personInformation, ...personObject } =
+      createPersonInput;
 
     console.log(".....personObject", personObject);
 
-    const newPerson = await this.personRepository.save(personObject);
+    const newPerson = await this.personRepository.save({
+      avatarUrl: `${process.env.CWD}${avatarUrl}`,
+      ...personObject,
+    });
 
     // Add person Information
     if (personInformation) {
+      console.log("check for person info");
       if (
         personInformation.quote !== "" ||
         personInformation.bio !== "" ||
         personInformation.dob !== null
       ) {
+        console.log("WEL person info");
         personInformation.personId = newPerson.id;
         await this.personInformationService.create(personInformation);
+      } else {
+        console.log("NO person info");
       }
     }
 
@@ -116,11 +124,13 @@ export class PersonsService {
     id: number,
     updatePersonInput: UpdatePersonInput
   ): Promise<Person> {
-    const { courseIds, personInformation, ...personObject } = updatePersonInput;
+    const { avatarUrl, courseIds, personInformation, ...personObject } =
+      updatePersonInput;
     console.log("id...", id);
 
     const updatedPerson = await this.personRepository.save({
       id: id,
+      avatarUrl: `${process.env.CWD}${avatarUrl}`,
       ...personObject,
     });
 

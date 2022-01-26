@@ -6,7 +6,6 @@ import {
   forwardRef,
 } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
-import { CloudinaryService } from "src/cloudinary/cloudinary.service";
 import { Intern } from "src/interns/entities/intern.entity";
 import { InternsService } from "src/interns/interns.service";
 import { PersonsService } from "src/persons/persons.service";
@@ -20,27 +19,20 @@ export class CompaniesService {
   constructor(
     @InjectRepository(Company)
     private readonly companyRepository: Repository<Company>,
-    private cloudinaryService: CloudinaryService,
     private readonly internsService: InternsService
   ) {}
 
   async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
     console.log("inpu...", createCompanyInput);
-    const newCompany = this.companyRepository.save(createCompanyInput);
+    const { teaserImage, ...companyObject } = createCompanyInput;
+    const newCompany = this.companyRepository.save({
+      teaserImage: `${process.env.CWD}${teaserImage}`,
+      ...companyObject,
+    });
 
     // console.log("newCompany", newCompany);
     // return this.companyRepository.save(newCompany);
     return newCompany;
-  }
-
-  async uploadImageToCloudinary(
-    @UploadedFile()
-    file: // file: Express.Multer.File
-    any
-  ) {
-    return await this.cloudinaryService.uploadImage(file).catch(() => {
-      throw new BadRequestException("Invalid file type.");
-    });
   }
 
   findAll(): Promise<Company[]> {
@@ -48,7 +40,7 @@ export class CompaniesService {
   }
 
   findOneById(id: number): Promise<Company> {
-    return this.companyRepository.findOneOrFail(id);
+    return this.companyRepository.findOne(id);
   }
 
   async findAllInterns(companyId: number): Promise<Intern[]> {
@@ -98,7 +90,7 @@ export class CompaniesService {
   // }
   async update(id: number, updateCompanyInput: UpdateCompanyInput) {
     console.log("input..", updateCompanyInput);
-    const { interns, ...companyInput } = updateCompanyInput;
+    const { teaserImage, interns, ...companyInput } = updateCompanyInput;
 
     interns.forEach(async (intern) => {
       if (intern.id) {
@@ -113,6 +105,7 @@ export class CompaniesService {
 
     const updatedCompany = this.companyRepository.save({
       id: id,
+      teaserImage: `${process.env.CWD}${teaserImage}`,
       ...updateCompanyInput,
     });
 
@@ -169,6 +162,8 @@ export class CompaniesService {
 
   async remove(id: number): Promise<Company> {
     const company = await this.findOneById(id);
-    return this.companyRepository.remove(company);
+    if (company) {
+      return this.companyRepository.remove(company);
+    }
   }
 }

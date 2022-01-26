@@ -42,6 +42,13 @@ export class Person {
   })
   academicYear?: string;
 
+  @Column({ nullable: true })
+  @Field(() => String, {
+    description: "The avatar url for the person",
+    nullable: true,
+  })
+  avatarUrl?: string;
+
   // @Column({ nullable: true })
   // @Field(() => Int, {
   //   description: "The generation this students belongs to",
