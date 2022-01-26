@@ -10,7 +10,7 @@ import {
 import { FileInterceptor } from "@nestjs/platform-express";
 import { diskStorage } from "multer";
 import path = require("path");
-import { join } from "path/posix";
+import { join } from "path";
 import { Observable, of } from "rxjs";
 import { v4 } from "uuid";
 
