@@ -121,3 +121,8 @@ package-lock.json
 
 
 .vscode
+
+############################
+# UPLOADS FOLDER
+############################
+uploads
