@@ -330,6 +330,8 @@ type Query {
   fieldExperiencesByPersonId(id: Int!): [FieldExperience!]!
   socialMedias: [SocialMedia!]!
   socialMedia(id: String!): SocialMedia!
+  interns: [Intern!]!
+  intern(id: Int!): Intern!
   courses: [Course!]!
   course(id: Int!): Course!
   coursesByLearningLineId(learningLineId: Int!): [Course!]!
@@ -345,8 +347,6 @@ type Query {
   generation(id: Int!): Generation!
   companies: [Company!]!
   company(id: Int!): Company!
-  interns: [Intern!]!
-  intern(id: Int!): Intern!
   users: [User!]!
   user(id: Int!): User!
   testimonials: [Testimonial!]!
@@ -366,6 +366,9 @@ type Mutation {
   createSocialMedia(createSocialMediaInput: CreateSocialMediaInput!): SocialMedia!
   updateSocialMedia(updateSocialMediaInput: UpdateSocialMediaInput!, id: String!): SocialMedia!
   removeSocialMedia(id: String!): SocialMedia!
+  createIntern(createInternInput: CreateInternInput!): Intern!
+  updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
+  removeIntern(id: Int!): Intern!
   createCourse(createCourseInput: CreateCourseInput!): Course!
   addAttachmentsToCourse(attachments: [Int!]!, courseId: Int!): Course!
   addTeachersToCourse(teacherIds: [Int!]!, courseId: Int!): Course!
@@ -391,9 +394,6 @@ type Mutation {
   createCompany(createCompanyInput: CreateCompanyInput!): Company!
   updateCompany(updateCompanyInput: UpdateCompanyInput!, id: Int!): Company!
   removeCompany(id: Int!): Company!
-  createIntern(createInternInput: CreateInternInput!): Intern!
-  updateIntern(updateInternInput: UpdateInternInput!, id: Int!): Intern!
-  removeIntern(id: Int!): Intern!
   updateUser(updateUserInput: UpdateUserInput!, id: Int!): User!
   removeUser(id: Int!): User!
   login(loginUserInput: LoginUserInput!): LoginResponse!
@@ -532,6 +532,43 @@ input UpdateFieldExperienceInput {
   """The description of the field experience"""
   description: String
   personId: Int!
+}
+
+input CreateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+}
+
+input UpdateInternInput {
+  """The name of the function"""
+  function: String
+
+  """The description of the function"""
+  description: String
+
+  """The year of the internship"""
+  year: String!
+
+  """The ID of the person this intern belongs to"""
+  studentId: Int!
+
+  """The ID of the company this intern worked at"""
+  companyId: Int
+
+  """The ID of the intern"""
+  id: Int
 }
 
 input CreateCourseInput {
@@ -728,23 +765,6 @@ input CreateCompanyInput {
   interns: [CreateInternInput!]
 }
 
-input CreateInternInput {
-  """The name of the function"""
-  function: String
-
-  """The description of the function"""
-  description: String
-
-  """The year of the internship"""
-  year: String!
-
-  """The ID of the person this intern belongs to"""
-  studentId: Int!
-
-  """The ID of the company this intern worked at"""
-  companyId: Int
-}
-
 input UpdateCompanyInput {
   """The name of the company"""
   name: String!
@@ -756,26 +776,6 @@ input UpdateCompanyInput {
   interns: [UpdateInternInput!]
 
   """The ID of the company"""
-  id: Int
-}
-
-input UpdateInternInput {
-  """The name of the function"""
-  function: String
-
-  """The description of the function"""
-  description: String
-
-  """The year of the internship"""
-  year: String!
-
-  """The ID of the person this intern belongs to"""
-  studentId: Int!
-
-  """The ID of the company this intern worked at"""
-  companyId: Int
-
-  """The ID of the intern"""
   id: Int
 }
 

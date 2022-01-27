@@ -2,6 +2,7 @@ import { forwardRef, Module } from "@nestjs/common";
 import { TypeOrmModule } from "@nestjs/typeorm";
 import { CompaniesModule } from "src/companies/companies.module";
 import { CoursesModule } from "src/courses/courses.module";
+import { InternsModule } from "src/interns/interns.module";
 import { PersonInformationsModule } from "src/person-informations/person-informations.module";
 import { ProjectsModule } from "src/projects/projects.module";
 
@@ -13,7 +14,7 @@ import { PersonsService } from "./persons.service";
   imports: [
     TypeOrmModule.forFeature([Person]),
     PersonInformationsModule,
-    // CoursesModule,
+    forwardRef(() => InternsModule),
     forwardRef(() => CoursesModule),
     forwardRef(() => ProjectsModule),
   ],

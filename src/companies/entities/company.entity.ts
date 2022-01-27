@@ -27,7 +27,10 @@ export class Company {
   teaserImage?: string;
 
   // Relations
-  @OneToMany(() => Intern, (intern) => intern.company, { cascade: true })
+  @OneToMany(() => Intern, (intern) => intern.company, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
   @Field(() => [Intern], {
     description: "The list of interns who worked at this company",
     nullable: true,

@@ -23,16 +23,22 @@ export class CompaniesService {
   ) {}
 
   async create(createCompanyInput: CreateCompanyInput): Promise<Company> {
-    console.log("inpu...", createCompanyInput);
     const { teaserImage, ...companyObject } = createCompanyInput;
-    const newCompany = this.companyRepository.save({
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      ...companyObject,
-    });
 
-    // console.log("newCompany", newCompany);
-    // return this.companyRepository.save(newCompany);
-    return newCompany;
+    let newCompany: Company;
+
+    // If image is provided, add path prefix to server & save image
+    if (teaserImage) {
+      const url = `${process.env.CWD}${teaserImage}`;
+      return await this.companyRepository.save({
+        teaserImage: url,
+        ...companyObject,
+      });
+    } else {
+      return await this.companyRepository.save({
+        ...companyObject,
+      });
+    }
   }
 
   findAll(): Promise<Company[]> {
@@ -52,90 +58,45 @@ export class CompaniesService {
     return [];
   }
 
-  // async update(id: number, updateCompanyInput: UpdateCompanyInput) {
-  // const { internIds, ...companyObject } = updateCompanyInput;
-  // await this.updateinternsInCompany(id, internIds);
-  // // }
-  // return this.companyRepository.save({
-  //   id: id,
-  //   ...companyObject,
-  // });
-  // }
-  //   const { interns, ...companyObject } = updateCompanyInput;
-
-  //   const updatedCompany1 = this.companyRepository.save({
-  //     id: id,
-  //     companyObject,
-  //   });
-
-  //   let company = await this.companyRepository.findOneOrFail(id, {
-  //     relations: ["interns"],
-  //   });
-
-  //   company.interns = [];
-
-  //   const updatedCompany2 = await this.companyRepository.save({
-  //     id: id,
-  //     ...company,
-  //   });
-
-  //   company.interns = interns;
-
-  //   const updatedCompany3 = await this.companyRepository.save({
-  //     id: id,
-  //     ...company,
-  //   });
-  //   console.log("....updated...", updatedCompany3);
-  //   return updatedCompany3;
-  // }
   async update(id: number, updateCompanyInput: UpdateCompanyInput) {
-    console.log("input..", updateCompanyInput);
     const { teaserImage, interns, ...companyInput } = updateCompanyInput;
 
-    interns.forEach(async (intern) => {
-      if (intern.id) {
-        // const { id: , ...internInput } = intern;
-        await this.internsService.remove(intern.id);
-      }
-      // await this.internsService.create({
-      //   companyId: id,
-      //   ...intern,
-      // });
+    let companyInfoFromDb = await this.companyRepository.findOne(id, {
+      relations: ["interns"],
     });
 
-    const updatedCompany = this.companyRepository.save({
-      id: id,
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      ...updateCompanyInput,
+    companyInfoFromDb?.interns.forEach(async (intern) => {
+      await this.internsService.remove(intern.id);
     });
 
-    // const { interns, ...companyObject } = updateCompanyInput;
+    await this.companyRepository.save(companyInfoFromDb);
 
-    // const updatedCompany1 = this.companyRepository.save({
-    //   id: id,
-    //   companyObject,
-    // });
+    interns?.forEach(async (intern) => {
+      const { id: internId, ...internInput } = intern;
+      await this.internsService.create({
+        companyId: id,
+        ...internInput,
+      });
+    });
 
-    // let company = await this.companyRepository.findOneOrFail(id, {
-    //   relations: ["interns"],
-    // });
+    if (teaserImage) {
+      let url;
 
-    // company.interns = [];
+      if (teaserImage.split("http").length <= 1) {
+        url = `${process.env.CWD}${teaserImage}`;
+      } else url = teaserImage;
 
-    // const updatedCompany2 = await this.companyRepository.save({
-    //   id: id,
-    //   ...company,
-    // });
-
-    // company.interns = interns;
-
-    // const updatedCompany3 = await this.companyRepository.save({
-    //   id: id,
-    //   ...company,
-    // });
-    // console.log("....updated...", updatedCompany3);
-    // return updatedCompany3;
-    return updatedCompany;
+      return await this.companyRepository.save({
+        id: id,
+        teaserImage: url,
+        ...companyInput,
+      });
+    } else {
+      return await this.companyRepository.save({
+        id: id,
+        ...companyInput,
+      });
+    }
   }
 
   async updateinternsInCompany(
@@ -154,7 +115,6 @@ export class CompaniesService {
       if (intern) {
         company.interns.push(intern);
       }
-      // if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
     });
 
     return this.companyRepository.save(company);

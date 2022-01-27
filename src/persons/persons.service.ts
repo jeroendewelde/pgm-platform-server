@@ -9,9 +9,9 @@ import { PersonInformation } from "src/person-informations/entities/person-infor
 import { CreatePersonInput } from "./dto/create-person.input";
 import { UpdatePersonInput } from "./dto/update-person.input";
 import { PersonInformationsService } from "src/person-informations/person-informations.service";
-import { CreatePersonInformationInput } from "src/person-informations/dto/create-person-information.input";
 import { CoursesService } from "src/courses/courses.service";
 import { Course } from "src/courses/entities/course.entity";
+import { InternsService } from "src/interns/interns.service";
 
 @Injectable()
 export class PersonsService {
@@ -20,34 +20,41 @@ export class PersonsService {
     private personRepository: Repository<Person>,
     private personInformationService: PersonInformationsService,
     @Inject(forwardRef(() => CoursesService))
-    private readonly coursesService: CoursesService
+    private readonly coursesService: CoursesService,
+    @Inject(forwardRef(() => InternsService))
+    private readonly internsService: InternsService
   ) {}
 
   async create(createPersonInput: CreatePersonInput): Promise<Person> {
     const { avatarUrl, courseIds, personInformation, ...personObject } =
       createPersonInput;
 
-    console.log(".....personObject", personObject);
+    let newPerson: Person;
 
-    const newPerson = await this.personRepository.create({
-      avatarUrl: `${process.env.CWD}${avatarUrl}`,
-      ...personObject,
-    });
+    // If image is provided, add path prefix to server & save image
+    if (avatarUrl) {
+      const url = `${process.env.CWD}${createPersonInput?.avatarUrl}`;
+      newPerson = await this.personRepository.create({
+        avatarUrl: url,
+        ...personObject,
+      });
+    } else {
+      newPerson = await this.personRepository.create({
+        ...personObject,
+      });
+    }
+
     const createdPerson = await this.personRepository.save(newPerson);
 
     // Add person Information
     if (personInformation) {
-      console.log("check for person info");
       if (
         personInformation.quote !== "" ||
         personInformation.bio !== "" ||
         personInformation.dob !== null
       ) {
-        console.log("WEL person info");
         personInformation.personId = createdPerson.id;
         await this.personInformationService.create(personInformation);
-      } else {
-        console.log("NO person info");
       }
     }
 
@@ -55,26 +62,27 @@ export class PersonsService {
       return await this.addCoursesToPerson(createdPerson.id, courseIds);
     }
     return createdPerson;
-    // } else {
-    //   return this.personRepository.save(newPerson);
-    // }
   }
 
   async addCoursesToPerson(
     personId: number,
-    courseIds: number[]
+    courseIds?: number[]
   ): Promise<Person> {
     const person = await this.personRepository.findOneOrFail(personId, {
       relations: ["courses"],
     });
 
-    console.log("new person....", person);
+    // Remove all courses from person
+    person.courses = [];
+    await this.personRepository.save(person);
 
-    courseIds.forEach(async (courseId) => {
-      const course = await this.coursesService.findOneById(courseId);
-
-      if (!person.courses.includes(course)) person.courses.push(course);
-    });
+    // Add courses to person
+    if (courseIds.length > 0) {
+      courseIds.forEach(async (courseId) => {
+        const course = await this.coursesService.findOneById(courseId);
+        person.courses.push(course);
+      });
+    }
 
     return this.personRepository.save(person);
   }
@@ -110,8 +118,7 @@ export class PersonsService {
       await this.personInformationService.findByPersonId(personId);
     if (personInformation) {
       return personInformation;
-    } else return [];
-    // return this.personInformationService.findByPersonId(personId);
+    } else return {};
   }
 
   async getCourses(personId: number): Promise<Course[]> {
@@ -129,28 +136,40 @@ export class PersonsService {
   ): Promise<Person> {
     const { avatarUrl, courseIds, personInformation, ...personObject } =
       updatePersonInput;
-    console.log("id...", id);
 
-    const updatedPerson = await this.personRepository.save({
-      id: id,
-      avatarUrl: `${process.env.CWD}${avatarUrl}`,
-      ...personObject,
-    });
+    let updatedPerson: Person;
+
+    // Check if image is not changed
+    if (avatarUrl) {
+      let url;
+
+      if (avatarUrl.split("http").length <= 1) {
+        url = `${process.env.CWD}${avatarUrl}`;
+      } else url = avatarUrl;
+
+      updatedPerson = await this.personRepository.save({
+        id: id,
+        avatarUrl: url,
+        ...personObject,
+      });
+    } else {
+      updatedPerson = await this.personRepository.save({
+        id: id,
+        ...personObject,
+      });
+    }
 
     // Update person Information
     if (personInformation) {
-      console.log("personInformation...", personInformation);
-      //TODO: check if personInformation exists
       const personInfoFromDb =
         await this.personInformationService.findByPersonId(id);
+
       if (personInfoFromDb) {
-        console.log("gevonden!");
         this.personInformationService.update(
           personInfoFromDb.id,
           personInformation
         );
       } else {
-        console.log("niet gevonden!");
         if (
           personInformation.quote !== "" ||
           personInformation.bio !== "" ||
@@ -160,11 +179,9 @@ export class PersonsService {
           await this.personInformationService.create(personInformation);
         }
       }
-    } else {
-      console.log("no personInformation...");
     }
 
-    if (courseIds && courseIds.length > 0) {
+    if (personObject.type === "TEACHER") {
       await this.addCoursesToPerson(id, courseIds);
     }
 
@@ -173,6 +190,23 @@ export class PersonsService {
 
   async remove(id: number) {
     const person = await this.findOneById(id);
-    return await this.personRepository.remove(person);
+
+    const personInformation =
+      await this.personInformationService.findByPersonId(id);
+
+    // Foreign key is in personInformation, so check if personInformation exists & delete
+    if (personInformation) {
+      await this.personInformationService.remove(personInformation.id);
+    }
+
+    const interns = await this.internsService.findByStudentId(id);
+
+    // Foreign key is in intern, so check if intern exists & delete, array has 1 or 0
+    interns?.forEach(async (intern) => {
+      await this.internsService.remove(intern.id);
+    });
+
+    if (person) return await this.personRepository.remove(person);
+    return null;
   }
 }

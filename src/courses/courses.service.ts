@@ -183,7 +183,6 @@ export class CoursesService {
       const teacher = await this.personsService.findOneById(teacherId);
 
       if (teacher.type === "TEACHER") {
-        // if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
         course.teachers.push(teacher);
       }
     });

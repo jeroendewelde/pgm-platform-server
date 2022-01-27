@@ -35,9 +35,10 @@ export class ProjectsService {
       teaserImage: `${process.env.CWD}${teaserImage}`,
       ...projectObject,
     });
+    const created = await this.projectRepository.save(newProject);
 
     if (studentIds && studentIds.length > 0) {
-      return await this.addStudentsToProject(newProject.id, studentIds);
+      return await this.addStudentsToProject(created.id, studentIds);
     } else {
       return this.projectRepository.save(newProject);
     }
