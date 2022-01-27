@@ -30,21 +30,24 @@ export class PersonInformationsService {
       personInformation
     );
 
+    const newSavedPersonInformation =
+      await this.personInformationRepository.save(personInformation);
+
     if (fieldExperiences.length > 0) {
       fieldExperiences.map(async (fieldExperience) => {
-        fieldExperience.personId = newPersonInformation.id;
+        fieldExperience.personId = newSavedPersonInformation.id;
         await this.fieldExperienceService.create(fieldExperience);
       });
     }
 
     if (socialMedias.length > 0) {
       socialMedias.map(async (socialMedia) => {
-        socialMedia.personId = newPersonInformation.id;
+        socialMedia.personId = newSavedPersonInformation.id;
         await this.socialMediaService.create(socialMedia);
       });
     }
 
-    return newPersonInformation;
+    return newSavedPersonInformation;
   }
 
   findAll(): Promise<PersonInformation[]> {
