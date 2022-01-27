@@ -68,7 +68,9 @@ export class Person {
   @Field((type) => PersonInformation, { nullable: true })
   personInformation?: PersonInformation;
 
-  @OneToOne((type) => Intern, (intern) => intern.student)
+  @OneToOne((type) => Intern, (intern) => intern.student, {
+    onDelete: "CASCADE",
+  })
   @Field((type) => Intern, { nullable: true })
   intern?: Intern;
 

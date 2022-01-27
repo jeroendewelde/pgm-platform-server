@@ -35,6 +35,7 @@ export class CompaniesResolver {
   createCompany(
     @Args("createCompanyInput") createCompanyInput: CreateCompanyInput
   ): Promise<Company> {
+    console.log("create mutatio", createCompanyInput);
     return this.companiesService.create(createCompanyInput);
   }
 

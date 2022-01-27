@@ -10,7 +10,6 @@ import { SocialMedia } from "src/social-medias/entities/social-media.entity";
 import { SocialMediasService } from "src/social-medias/social-medias.service";
 import { FieldExperience } from "src/field-experiences/entities/field-experience.entity";
 import { FieldExperiencesService } from "src/field-experiences/field-experiences.service";
-import { KnownFragmentNamesRule } from "graphql";
 
 @Injectable()
 export class PersonInformationsService {
@@ -27,27 +26,28 @@ export class PersonInformationsService {
     let { fieldExperiences, socialMedias, ...personInformation } =
       createPersonInformationInput;
 
-    const newPersonInformation = await this.personInformationRepository.save(
+    const newPersonInformation = await this.personInformationRepository.create(
       personInformation
     );
 
+    const newSavedPersonInformation =
+      await this.personInformationRepository.save(personInformation);
+
     if (fieldExperiences.length > 0) {
-      console.log("wél field experiences");
       fieldExperiences.map(async (fieldExperience) => {
-        fieldExperience.personId = newPersonInformation.id;
+        fieldExperience.personId = newSavedPersonInformation.id;
         await this.fieldExperienceService.create(fieldExperience);
       });
-    } else console.log("no field experiences");
+    }
 
     if (socialMedias.length > 0) {
-      console.log("wél socual meidas", socialMedias);
       socialMedias.map(async (socialMedia) => {
-        socialMedia.personId = newPersonInformation.id;
-        const created = await this.socialMediaService.create(socialMedia);
-        console.log("created....", created);
+        socialMedia.personId = newSavedPersonInformation.id;
+        await this.socialMediaService.create(socialMedia);
       });
-    } else console.log("no social media");
-    return newPersonInformation;
+    }
+
+    return newSavedPersonInformation;
   }
 
   findAll(): Promise<PersonInformation[]> {
@@ -82,20 +82,20 @@ export class PersonInformationsService {
     id: number,
     updatePersonInformationInput: UpdatePersonInformationInput
   ): Promise<PersonInformation> {
-    const personInfoFromDb =
-      await this.personInformationRepository.findOneOrFail(id, {
+    let personInfoFromDb = await this.personInformationRepository.findOneOrFail(
+      id,
+      {
         relations: ["socialMedias", "fieldExperiences"],
-      });
+      }
+    );
 
-    if (personInfoFromDb.socialMedias.length > 0) {
-      await this.socialMediaService.removeList(personInfoFromDb.socialMedias);
-    }
+    personInfoFromDb?.socialMedias.forEach(async (socialMedia) => {
+      await this.socialMediaService.remove(socialMedia.id);
+    });
 
-    if (personInfoFromDb.fieldExperiences.length > 0) {
-      await this.fieldExperienceService.removeList(
-        personInfoFromDb.fieldExperiences
-      );
-    }
+    personInfoFromDb?.fieldExperiences.forEach(async (fieldExperience) => {
+      await this.fieldExperienceService.remove(fieldExperience.id);
+    });
 
     const updatedPersonInformation =
       await this.personInformationRepository.save({

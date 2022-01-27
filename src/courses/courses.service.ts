@@ -30,10 +30,22 @@ export class CoursesService {
   async create(createCourseInput: CreateCourseInput): Promise<Course> {
     const { teacherIds, teaserImage, ...courseObject } = createCourseInput;
 
-    const newCourse = await this.courseRepository.create({
-      teaserImage: teaserImage ? `${process.env.CWD}${teaserImage}` : null,
-      ...courseObject,
-    });
+    let newCourse: Course;
+
+    // If image is provided, add path prefix to server & save image
+    if (teaserImage) {
+      const url = `${process.env.CWD}${teaserImage}`;
+      newCourse = await this.courseRepository.create({
+        teaserImage: url,
+        ...courseObject,
+      });
+    } else {
+      newCourse = await this.courseRepository.create({
+        ...courseObject,
+      });
+    }
+
+    const createdCourse = await this.courseRepository.save(newCourse);
 
     if (teacherIds && teacherIds.length > 0) {
       return await this.addTeachersToCourse(newCourse.id, teacherIds);
@@ -69,12 +81,12 @@ export class CoursesService {
       relations: ["teachers"],
     });
 
-    teacherIds.forEach(async (teacherId) => {
-      const teacher = await this.personsService.findOneById(teacherId);
+    course.teachers = [];
+    await this.courseRepository.save(course);
 
-      if (teacher.type === "TEACHER") {
-        if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
-      }
+    teacherIds?.forEach(async (teacherId) => {
+      const teacher = await this.personsService.findOneById(teacherId);
+      course.teachers.push(teacher);
     });
     return this.courseRepository.save(course);
   }
@@ -149,24 +161,26 @@ export class CoursesService {
   ): Promise<Course> {
     const { teacherIds, teaserImage, ...courseObject } = updateCourseInput;
 
-    // const updatedCourse1 = this.courseRepository.save({
-    //   id: id,
-    //   courseObject
-    // })
-
-    // let course = await this.courseRepository.findOneOrFail(id, {
-    //   relations: ["teachers"]
-    // });
-
-    // if (teacherIds && teacherIds.length > 0) {
     await this.updateTeachersInCourse(id, teacherIds);
-    // }
 
-    return this.courseRepository.save({
-      id: id,
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      ...courseObject,
-    });
+    if (teaserImage) {
+      let url;
+
+      if (teaserImage.split("http").length <= 1) {
+        url = `${process.env.CWD}${teaserImage}`;
+      } else url = teaserImage;
+
+      return await this.courseRepository.save({
+        id: id,
+        teaserImage: url,
+        ...courseObject,
+      });
+    } else {
+      return await this.courseRepository.save({
+        id: id,
+        ...courseObject,
+      });
+    }
   }
 
   async updateTeachersInCourse(
@@ -179,13 +193,9 @@ export class CoursesService {
 
     course.teachers = [];
 
-    teacherIds.forEach(async (teacherId) => {
+    teacherIds?.forEach(async (teacherId) => {
       const teacher = await this.personsService.findOneById(teacherId);
-
-      if (teacher.type === "TEACHER") {
-        // if (!course.teachers.includes(teacher)) course.teachers.push(teacher);
-        course.teachers.push(teacher);
-      }
+      course.teachers.push(teacher);
     });
 
     return this.courseRepository.save(course);

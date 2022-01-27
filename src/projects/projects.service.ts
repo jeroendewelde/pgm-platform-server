@@ -31,10 +31,22 @@ export class ProjectsService {
   async create(createProjectInput: CreateProjectInput): Promise<Project> {
     const { studentIds, teaserImage, ...projectObject } = createProjectInput;
 
-    const newProject = await this.projectRepository.create({
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      ...projectObject,
-    });
+    let newProject: Project;
+
+    // If image is provided, add path prefix to server & save image
+    if (teaserImage) {
+      const url = `${process.env.CWD}${teaserImage}`;
+      newProject = await this.projectRepository.create({
+        teaserImage: url,
+        ...projectObject,
+      });
+    } else {
+      newProject = await this.projectRepository.create({
+        ...projectObject,
+      });
+    }
+
+    await this.projectRepository.save(newProject);
 
     if (studentIds && studentIds.length > 0) {
       return await this.addStudentsToProject(newProject.id, studentIds);
@@ -123,17 +135,29 @@ export class ProjectsService {
     updateProjectInput: UpdateProjectInput
   ): Promise<Project> {
     const { studentIds, teaserImage, ...projectObject } = updateProjectInput;
-    console.log("....studentIds...", studentIds);
 
     if (studentIds && studentIds.length > 0) {
       await this.updateStudentsInProject(id, studentIds);
     }
 
-    return this.projectRepository.save({
-      id: id,
-      teaserImage: `${process.env.CWD}${teaserImage}`,
-      ...projectObject,
-    });
+    if (teaserImage) {
+      let url;
+
+      if (teaserImage.split("http").length <= 1) {
+        url = `${process.env.CWD}${teaserImage}`;
+      } else url = teaserImage;
+
+      return await this.projectRepository.save({
+        id: id,
+        teaserImage: url,
+        ...projectObject,
+      });
+    } else {
+      return await this.projectRepository.save({
+        id: id,
+        ...projectObject,
+      });
+    }
   }
 
   async updateStudentsInProject(

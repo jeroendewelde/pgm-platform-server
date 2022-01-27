@@ -18,6 +18,7 @@ export class SocialMediasService {
     const newSocialMedia = this.socialMediaRepository.create(
       createSocialMediaInput
     );
+    console.log("....social media input", createSocialMediaInput);
     return this.socialMediaRepository.save(newSocialMedia);
   }
 
